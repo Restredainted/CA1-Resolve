@@ -15,15 +15,15 @@ public class Player : MonoBehaviour
     enum face {none, left, right}; //Enum to get camera facing direction.  
     private face playerFace;
     private bool inAir;
-    private int frame, delay;
-    [SerializeField] private Canvas _debugCanvas;
+    private int delay;
+    [SerializeField] private GameObject _debugCanvas;
     private bool debugDisplay = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        frame = 0;
+        //frame = 0;
         Debug.Log("Player Start");
         jumpHeight = 500f;
         speed = 0f;
@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
         deceleration = 10f;
         playerFace = face.none;
         rbody = GetComponent<Rigidbody2D>();
+        debugDisplay = false;
 
         //keep player object upright. 
         rbody.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -104,7 +105,12 @@ public class Player : MonoBehaviour
         
         if (Input.GetKey(KeyCode.F3) && delay < 0) {
             Debug.Log("Debug Toggle");
-            _debugCanvas.enabled = true;
+
+            if (debugDisplay) {
+                _debugCanvas.SetActive(true);
+            }
+            else _debugCanvas.SetActive(true);
+
             delay = 180;
         }
         delay--;
