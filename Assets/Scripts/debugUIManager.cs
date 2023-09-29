@@ -1,18 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class debugUIManager : MonoBehaviour
 {
+    [SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugYPos , _debugXPos,_debugFrames;
+    [SerializeField] private Rigidbody2D player;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _debugXPos.text = "X Position: " + player.position.x.ToString();
+        _debugYPos.text = "Y Position: " + player.position.y.ToString();
+        _debugVelY.text = "Velocity Y: " + player.velocityY.ToString();
+        _debugVelX.text = "Velocity X: " + player.velocityX.ToString();
+        _debugTime.text = "Time: " + Time.time.ToString();
+        _debugFrames.text = "Frame count: " + Time.frameCount.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        _debugXPos.text = "X Position: " + player.position.x.ToString();
+        _debugYPos.text = "Y Position: " + player.position.y.ToString();
+        _debugVelY.text = "Velocity Y: " + player.velocityY.ToString();
+        _debugVelX.text = "Velocity X: " + player.velocityX.ToString();
+        _debugTime.text = "Time: " + Time.time.ToString();
+        _debugFrames.text = "Frame count: " + Time.frameCount.ToString();
     }
 }
+   /* void toggleDebug() {
+        if (enabled) {
+            enabled = false;
+        }
+        else enabled = true;
+
+    } */
