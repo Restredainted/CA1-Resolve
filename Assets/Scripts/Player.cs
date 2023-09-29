@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
 
 public class Player : MonoBehaviour
 {
-    public float jumpHeight;
-    private float horizontal, speed;
-    public float maxSpeed, acceleration, deceleration;
+    public float jumpHeight, speed;
+    private float horizontal;
+    //public float maxSpeed, acceleration, deceleration;
     public float health, maxHealth, mana, maxMana;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
@@ -28,16 +27,18 @@ public class Player : MonoBehaviour
     {
         //frame = 0;
         Debug.Log("Player Start");
-        jumpHeight = 15f;
-        speed = 7.5f;
-        maxSpeed = 10f;
-        acceleration = 15f; 
-        deceleration = 1.5f;
+        //jumpHeight = 15f;
+        //speed = 7.5f;
+        //maxSpeed = 10f;
+        //acceleration = 15f; 
+        //deceleration = 1.5f;
         playerFace = face.none;
         rbody = GetComponent<Rigidbody2D>();
         health = 100f;
         maxHealth = 100f;
-
+        mana = 100f;
+        maxMana = 100f;
+        
         //keep player object upright. 
         //rbody.constraints = RigidbodyConstraints2D.FreezeRotation; //Enabled in object properties.
         //rigidbody.transform.localRotation = localRotation(0, 0, 0);
@@ -62,13 +63,15 @@ public class Player : MonoBehaviour
             //
             Debug.Log("Jump input");
             //rbody.AddForceY(jumpHeight);
-            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + (rbody.velocity.x / 2));
+            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x / 1.5f));
             
         }
 
+
+        //increases jump height longer the key's held. 
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonUp("Jump")) && rbody.velocity.y > 0f)
         {
-            rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.5f);
+            rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.25f);
         }
 
         
@@ -84,24 +87,24 @@ public class Player : MonoBehaviour
             
         }
 
-        /* //Move left input.
-        if (Input.GetKey(KeyCode.A) && (speed > -maxSpeed) && isGrounded()) {
+        //Move left input.
+        if (Input.GetKey(KeyCode.A)) {
             //set face left
             playerFace = face.left;
             //speed += acceleration * Time.deltaTime;
-            rbody.velocity = Vector2.left * speed;
+            //rbody.velocity = Vector2.left * speed;
             
             
         }
         
         //Move right input.
-        else if (Input.GetKey(KeyCode.D) && (speed < maxSpeed) && isGrounded()) {
+        else if (Input.GetKey(KeyCode.D)) {
             playerFace = face.right;
             //speed += acceleration * Time.deltaTime;
-            rbody.velocity = Vector2.right * speed;
+            //rbody.velocity = Vector2.right * speed;
             
             
-        } */
+        } 
 
         /* else {
             if (speed > deceleration * Time.deltaTime) {
@@ -120,17 +123,18 @@ public class Player : MonoBehaviour
         //rbody.velocityX = speed;
 
         
-        if (Input.GetKeyDown(KeyCode.F3)) {
-            
-            Debug.Log("Debug Toggle");
-            gameManager.UIManager.toggleDebug();
-            
-        }
+        
 
         //Debug test keys. 
         if (gameManager.debugEnabled) {
+
+            if (Input.GetKeyDown(KeyCode.F3)) {
+                Debug.Log("Debug Toggle");
+                gameManager.UIManager.toggleDebug();
+            }
+
             if (Input.GetKeyDown(KeyCode.Keypad1)) {
-            takeDamage(10);
+                takeDamage(10);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad2)) {

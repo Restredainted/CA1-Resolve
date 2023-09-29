@@ -244,6 +244,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SS_UI_Elements_5
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 110
+        width: 21
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b853f75234a44ce49ab9a5e8dd31ba5f
+      internalID: -1935689940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -260,6 +281,7 @@ TextureImporter:
       SS_UI_Elements_2: 4732943726416324343
       SS_UI_Elements_3: -1651138750
       SS_UI_Elements_4: 1776738
+      SS_UI_Elements_5: -1935689940
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
