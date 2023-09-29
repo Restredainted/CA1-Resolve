@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugFrames; //
     [SerializeField] private GameObject _debugUI;
     [SerializeField] private Player player;
+    [SerializeField] private Image healthBar, manaBar;
     private bool debugVisible;
 
     
@@ -24,6 +25,7 @@ public class UIManager : MonoBehaviour
         _debugVelX.text = "Velocity X: " + rbody.velocityX.ToString();
         _debugTime.text = Time.frameCount.ToString();
         _debugFrames.text = Time.time.ToString(); */
+
     }
 
     // Update is called once per frame
@@ -35,6 +37,9 @@ public class UIManager : MonoBehaviour
         _debugVelX.text = "Velocity X: " + player.GetComponent<Rigidbody2D>().velocityX.ToString();
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString(); */
+        
+        healthBar.fillAmount = player.health / 100f;
+        manaBar.fillAmount = player.mana / 100f;
        
     }
 

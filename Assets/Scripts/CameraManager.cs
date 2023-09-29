@@ -19,7 +19,7 @@ public class CameraManager : MonoBehaviour
     public float smoothTime = 1F;
     private Vector3 velocity = Vector3.zero, targetPosition;
     
-    Player player;// = GetComponent<Player>;
+    public Player player;// = GetComponent<Player>;
 
     // Start is called before the first frame update
         void Start()
@@ -32,7 +32,7 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        player = MonoBehaviour.FindFirstObjectByType<Player>();
+        
         target = player.transform;
 
         
