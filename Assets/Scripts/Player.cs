@@ -10,17 +10,18 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, mana, maxMana;
+    public float health, maxHealth;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     enum face {none, left, right}; //Enum to get camera facing direction.  
+    public int mana, maxMana;
     private face playerFace;
     private bool inAir;
     public GameManager gameManager;
     
-//Updated movement using the tutorial below.
-//https://www.youtube.com/watch?v=K1xZ-rycYY8
+    //Updated movement using the tutorial below.
+    //https://www.youtube.com/watch?v=K1xZ-rycYY8
 
     // Start is called before the first frame update
     void Start()
@@ -36,8 +37,8 @@ public class Player : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         health = 100f;
         maxHealth = 100f;
-        mana = 100f;
-        maxMana = 100f;
+        mana = 3;
+        maxMana = 3;
         
         //keep player object upright. 
         //rbody.constraints = RigidbodyConstraints2D.FreezeRotation; //Enabled in object properties.
@@ -63,7 +64,7 @@ public class Player : MonoBehaviour
             //
             Debug.Log("Jump input");
             //rbody.AddForceY(jumpHeight);
-            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x / 1.5f));
+            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
             
         }
 
@@ -91,6 +92,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) {
             //set face left
             playerFace = face.left;
+            GetComponent<SpriteRenderer>().flipX = true;
             //speed += acceleration * Time.deltaTime;
             //rbody.velocity = Vector2.left * speed;
             
@@ -100,6 +102,7 @@ public class Player : MonoBehaviour
         //Move right input.
         else if (Input.GetKey(KeyCode.D)) {
             playerFace = face.right;
+            GetComponent<SpriteRenderer>().flipX = false;
             //speed += acceleration * Time.deltaTime;
             //rbody.velocity = Vector2.right * speed;
             
@@ -138,22 +141,26 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad2)) {
+                takeDamage(50);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad3)) {
                 heal(10);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                useMana(15);
+                manaCost(1);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad5)) {
-                restoreMana(10);
+                manaHeal(1);
             }
 
         }
 
 
+        //flip();
         
-        flip();
         
     }
 
@@ -187,7 +194,9 @@ public class Player : MonoBehaviour
     } */
 
     public void takeDamage(float damage) {
+        gameManager.UIManager.healthAdjust = health;
         health -= damage;
+        health = Mathf.Clamp(health, 0, maxHealth);
     }
 
     public void heal(float healing) {
@@ -195,11 +204,12 @@ public class Player : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
     }
 
-    public void useMana(float spend) {
+    public void manaCost(int spend) {
         mana -= spend;
+        mana = Mathf.Clamp(mana, 0, maxMana);
     }
 
-    public void restoreMana(float restore) {
+    public void manaHeal(int restore) {
         mana += restore;
         mana = Mathf.Clamp(mana, 0, maxMana);
     }
@@ -208,19 +218,20 @@ public class Player : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
 
-    private void flip() {
+    /* private void flip() {
         
-        if ( playerFace == face.right && horizontal < 0f || playerFace == face.left && horizontal > 0f) {
+        if ( playerFace == face.right && horizontal > 0f || playerFace == face.left && horizontal < 0f) {
             
-            if (playerFace == face.left) {
+            /* if (playerFace == face.left) {
                 playerFace = face.right;
             }
-            else playerFace = face.left;
+            else playerFace = face.left; 
 
             Vector3 localScale = transform.localScale;
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-    }
+
+    } */
 
 }

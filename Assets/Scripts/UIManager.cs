@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,11 @@ public class UIManager : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugFrames; //
     [SerializeField] private GameObject _debugUI;
     [SerializeField] private Player player;
-    [SerializeField] private Image healthBar, manaBar;
+    public float healthAdjust; 
+    private Transform healthAdjPos, healthBarPos;
+    [SerializeField] private Image healthBar, healthChange, manaOrb;
+    [SerializeField] private GameObject healthBarFullPos;
+    [SerializeField] private GameObject[] ManaCount;
     private bool debugVisible;
 
     
@@ -18,6 +23,9 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         debugVisible = false;
+        healthBarFullPos.transform.localPosition = healthBar.transform.localPosition;
+        
+
         /* Moved and updated in DebugUIManager
         rbody = player.GetRigidbody2D();
 
@@ -38,9 +46,20 @@ public class UIManager : MonoBehaviour
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString(); */
         
+        if (healthAdjust > player.health) {
+            healthAdjust -= (math.abs(player.health-healthAdjust) / 1.5f * Time.deltaTime) + 0.5f;
+        }
+        else healthAdjust = player.health;
+
+        healthChange.fillAmount = healthAdjust / 100f;
+        healthChange.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (healthAdjust / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
+
         healthBar.fillAmount = player.health / 100f;
-        manaBar.fillAmount = player.mana / 100f;
-       
+        healthBar.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (player.health / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
+
+         
+        
+        
     }
 
    public void toggleDebug() {
