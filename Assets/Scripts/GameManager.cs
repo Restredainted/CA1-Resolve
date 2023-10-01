@@ -42,13 +42,13 @@ public class GameManager : MonoBehaviour
     }
 
     // Show the number of calls to both messages.
-    void OnGUI()
+    /* void OnGUI()
     {
         GUIStyle fontSize = new GUIStyle(GUI.skin.GetStyle("label"));
         fontSize.fontSize = 24;
         GUI.Label(new Rect(100, 100, 200, 50), "Update: " + updateUpdateCountPerSecond.ToString(), fontSize);
         GUI.Label(new Rect(100, 150, 200, 50), "FixedUpdate: " + updateFixedUpdateCountPerSecond.ToString(), fontSize);
-    }
+    } */
     // Update both CountsPerSecond values every second.
     IEnumerator Loop()
     {

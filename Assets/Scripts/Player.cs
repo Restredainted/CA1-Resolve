@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -10,12 +11,13 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth;
+    public float health, maxHealth, manaCharge, chargeTime;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     enum face {none, left, right}; //Enum to get camera facing direction.  
     public int mana, maxMana;
+    public List<bool> manaStatus = new List<bool>();
     private face playerFace;
     private bool inAir;
     public GameManager gameManager;
@@ -39,6 +41,9 @@ public class Player : MonoBehaviour
         maxHealth = 100f;
         mana = 3;
         maxMana = 3;
+        for (int i = 0; i < maxMana; i++) {
+            manaStatus.Add(true);
+        }
         
         //keep player object upright. 
         //rbody.constraints = RigidbodyConstraints2D.FreezeRotation; //Enabled in object properties.
@@ -149,7 +154,10 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                manaCost(1);
+                if (manaAvailable() > 1) {
+                    manaCost(1);
+                }
+                
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad5)) {
@@ -158,6 +166,11 @@ public class Player : MonoBehaviour
 
         }
 
+        manaCharge +=  Time.time;
+        if (manaCharge >= chargeTime) {
+            manaRecharge();
+            manaCharge = 0;
+        }
 
         //flip();
         
@@ -204,9 +217,28 @@ public class Player : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
     }
 
+    public int manaAvailable() {
+        int count = 0;
+
+        for (int i = 0; i <= manaStatus.Count; i++) {
+            if (manaStatus[i] == true) {
+                count++;
+                
+            }
+        }
+        return count;
+    }
+
     public void manaCost(int spend) {
+        for (int i = manaStatus.Count; i >=0; i--) {
+            if (manaStatus[i] == true) {
+                manaStatus[i] = false;
+                break;
+            }
+        }
+        /* 
         mana -= spend;
-        mana = Mathf.Clamp(mana, 0, maxMana);
+        mana = Mathf.Clamp(mana, 0, maxMana); */
     }
 
     public void manaHeal(int restore) {
@@ -214,9 +246,25 @@ public class Player : MonoBehaviour
         mana = Mathf.Clamp(mana, 0, maxMana);
     }
 
+    public void manaRecharge() {
+        for (int i = 0; i < manaStatus.Count; i++) {
+            if (manaStatus[i] == false) {
+                manaStatus[i] = true;
+                break;
+            }
+        }
+        
+        /* mana += 1;
+        mana = Mathf.Clamp(mana, 0, maxMana); */
+    }
+
+
+
     private bool isGrounded() {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
+
+    //From movement tutorial, found better functionality through use of sprite.flipX
 
     /* private void flip() {
         

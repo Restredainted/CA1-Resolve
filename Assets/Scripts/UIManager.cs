@@ -11,11 +11,11 @@ public class UIManager : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugFrames; //
     [SerializeField] private GameObject _debugUI;
     [SerializeField] private Player player;
-    public float healthAdjust; 
-    private Transform healthAdjPos, healthBarPos;
-    [SerializeField] private Image healthBar, healthChange, manaOrb;
-    [SerializeField] private GameObject healthBarFullPos;
-    [SerializeField] private GameObject[] ManaCount;
+    public float healthAdjust, manaRecharge; 
+    //private Transform healthAdjPos, healthBarPos;
+    [SerializeField] private Image healthBar, healthChange;
+    [SerializeField] private GameObject healthBarFullPos, manaOrb, manaOrbPos;
+    [SerializeField] private List<GameObject> manaCount = new List<GameObject>();
     private bool debugVisible;
 
     
@@ -23,6 +23,21 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         debugVisible = false;
+        
+        for (int i = 0; i < player.maxMana; i += 1) {
+
+            //Drawn successfully using below forum post:
+            //https://discussions.unity.com/t/instantiate-as-a-child-of-the-parent/43354
+            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+            manaOrbNew.transform.SetParent(manaOrbPos.transform);
+            manaOrbNew.GetComponent<ManaUIManager>().index = i;
+            //new Vector2(6,2);
+            //manaOrbNew.transform.set-
+            manaCount.Add(manaOrbNew);
+            
+        }
+
+        //Set end point for maximum HP bar. 
         healthBarFullPos.transform.localPosition = healthBar.transform.localPosition;
         
 
@@ -46,23 +61,46 @@ public class UIManager : MonoBehaviour
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString(); */
         
+        //Calculate health Slow damage amount
         if (healthAdjust > player.health) {
             healthAdjust -= (math.abs(player.health-healthAdjust) / 1.5f * Time.deltaTime) + 0.5f;
         }
         else healthAdjust = player.health;
 
+        //Health Bar slow damage
         healthChange.fillAmount = healthAdjust / 100f;
         healthChange.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (healthAdjust / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
 
+        //Health Bar Actual Damage
         healthBar.fillAmount = player.health / 100f;
         healthBar.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (player.health / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
+        
+        Debug.Log(manaCount.Count);
 
-         
+        if (Time.time % 10 == 0) {}
+        for (int i = 0; i <= 2; i++) {
+            if (player.mana >= i) {
+                //manaCount[i]
+            }   
+            
+            
+        } 
+    }
         
-        
+    
+    public void manaUpgrade() {
+        for (float i = manaCount.Count ; i < player.maxMana; i += 1) {
+            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+            manaOrbNew.transform.SetParent(manaOrbPos.transform);
+            //new Vector2(6,2);
+            //manaOrbNew.transform.set-
+            manaCount.Add(manaOrbNew);
+            
+        }
     }
 
-   public void toggleDebug() {
+    //Debug Display Toggle Method. 
+    public void toggleDebug() {
         if (debugVisible) {
             debugVisible = false;
             _debugUI.SetActive(false);
