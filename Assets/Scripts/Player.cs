@@ -11,15 +11,15 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, manaCharge, chargeTime;
+    public float health, maxHealth, manaCharge;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     enum face {none, left, right}; //Enum to get camera facing direction.  
-    public int mana, maxMana;
-    public List<bool> manaStatus = new List<bool>();
+    public int maxMana;
+    public List<ManaCell> manaCells = new List<ManaCell>();
     private face playerFace;
-    private bool inAir;
+    private bool grounded;
     public GameManager gameManager;
     
     //Updated movement using the tutorial below.
@@ -39,10 +39,11 @@ public class Player : MonoBehaviour
         rbody = GetComponent<Rigidbody2D>();
         health = 100f;
         maxHealth = 100f;
-        mana = 3;
         maxMana = 3;
         for (int i = 0; i < maxMana; i++) {
-            manaStatus.Add(true);
+            ManaCell newCell = Instantiate(new ManaCell());
+            manaCells.Add(new ManaCell());
+            manaCells[i].index = i;
         }
         
         //keep player object upright. 
@@ -150,12 +151,12 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad3)) {
-                heal(10);
+                healFull();
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                if (manaAvailable() > 1) {
-                    manaCost(1);
+                if (manaAvailable()) {
+                    manaCost();
                 }
                 
             }
@@ -166,11 +167,8 @@ public class Player : MonoBehaviour
 
         }
 
-        manaCharge +=  Time.time;
-        if (manaCharge >= chargeTime) {
-            manaRecharge();
-            manaCharge = 0;
-        }
+        
+        
 
         //flip();
         
@@ -216,23 +214,26 @@ public class Player : MonoBehaviour
         health += healing;
         health = Mathf.Clamp(health, 0, maxHealth);
     }
+    public void healFull() {
+        health = maxHealth;
+        health = Mathf.Clamp(health, 0, maxHealth);
+    }
 
-    public int manaAvailable() {
-        int count = 0;
-
-        for (int i = 0; i <= manaStatus.Count; i++) {
-            if (manaStatus[i] == true) {
-                count++;
+    public bool manaAvailable() {
+        
+        for (int i = 0; i <= manaCells.Count; i++) {
+            if (manaCells[i].ready == true) {
+                return true;
                 
             }
         }
-        return count;
+        return false;
     }
 
-    public void manaCost(int spend) {
-        for (int i = manaStatus.Count; i >=0; i--) {
-            if (manaStatus[i] == true) {
-                manaStatus[i] = false;
+    public void manaCost() {
+        for (int i = manaCells.Count; i >=0; i--) {
+            if (manaCells[i].ready == true) {
+                manaCells[i].ready = false;
                 break;
             }
         }
@@ -242,21 +243,22 @@ public class Player : MonoBehaviour
     }
 
     public void manaHeal(int restore) {
-        mana += restore;
-        mana = Mathf.Clamp(mana, 0, maxMana);
+        for (int i = 0; i < manaCells.Count;i++) {
+            manaCells[i].ready = true;
+        }
     }
-
+    /* 
     public void manaRecharge() {
-        for (int i = 0; i < manaStatus.Count; i++) {
-            if (manaStatus[i] == false) {
-                manaStatus[i] = true;
+        for (int i = 0; i < manaCells.Count; i++) {
+            if (manaCells[i] == false) {
+                manaCells[i] = true;
                 break;
             }
         }
         
         /* mana += 1;
-        mana = Mathf.Clamp(mana, 0, maxMana); */
-    }
+        mana = Mathf.Clamp(mana, 0, maxMana); * /
+    } */
 
 
 

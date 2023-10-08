@@ -1207,14 +1207,14 @@ MonoBehaviour:
   speed: 10
   health: 100
   maxHealth: 100
+  manaCharge: 0
   rbody: {fileID: 834056743}
   groundCheck: {fileID: 148850550}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  mana: 0
   maxMana: 0
-  manaStatus: 
+  manaCells: []
   gameManager: {fileID: 225434649}
 --- !u!50 &834056743
 Rigidbody2D:
@@ -33322,10 +33322,11 @@ MonoBehaviour:
   _debugUI: {fileID: 1399253983}
   player: {fileID: 834056742}
   healthAdjust: 0
+  manaRecharge: 0
   healthBar: {fileID: 563908834}
   healthChange: {fileID: 583405850}
   healthBarFullPos: {fileID: 1890298421}
-  manaOrb: {fileID: 7299007593174426701, guid: e6146c2cadd06314fb13f9d741d34c7b, type: 3}
+  manaOrb: {fileID: 8663885552806553749, guid: ce578e51625afab42bafd73f73e82031, type: 3}
   manaOrbPos: {fileID: 1415139079}
   manaCount: []
 --- !u!1 &1905716960
@@ -33692,6 +33693,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9958774e8458ed4588346a594937f57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _manaBG: {fileID: 6716050738474758947}
+  _manaCharge: {fileID: 3621610258418038005}
+  _manaReady: {fileID: 2008983143978571276}
+  index: 0
   gameManager: {fileID: 225434649}
 --- !u!224 &5675554133455297983
 RectTransform:

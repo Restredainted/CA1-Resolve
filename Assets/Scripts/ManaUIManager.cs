@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ManaUIManager : MonoBehaviour
 {
-    [SerializeField] Image _manaBG, _manaCharge, _manaReady; 
+    [SerializeField] public Image _manaBG, _manaCharge, _manaReady; 
     public int index;
     [SerializeField] private GameManager gameManager;
 
@@ -21,12 +21,17 @@ public class ManaUIManager : MonoBehaviour
     void Update()
     {
         
-        if (gameManager.player.manaStatus[index] == false) {
+        if (gameManager.player.manaCells[index].ready == false) {
             _manaReady.enabled = false;
-            if ((index != 0) && (gameManager.player.manaStatus[index - 1] == true )) {
-                _manaCharge.fillAmount = gameManager.player.manaCharge / 100f;
-            }
+            
+            _manaCharge.fillAmount = gameManager.player.manaCells[index].recharge / 100f;
+            
         }
+        else {
+            _manaReady.enabled = true;
+        }
+
+
         
     }
 

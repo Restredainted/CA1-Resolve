@@ -60,7 +60,11 @@ public class UIManager : MonoBehaviour
         _debugVelX.text = "Velocity X: " + player.GetComponent<Rigidbody2D>().velocityX.ToString();
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString(); */
-        
+        for(int i = 0; i <= manaCount.Count; i++) {
+            //manaCount[i].SetActive(true);
+        }
+
+
         //Calculate health Slow damage amount
         if (healthAdjust > player.health) {
             healthAdjust -= (math.abs(player.health-healthAdjust) / 1.5f * Time.deltaTime) + 0.5f;
@@ -77,26 +81,27 @@ public class UIManager : MonoBehaviour
         
         Debug.Log(manaCount.Count);
 
-        if (Time.time % 10 == 0) {}
+       /*  if (Time.time % 10 == 0) {}
         for (int i = 0; i <= 2; i++) {
             if (player.mana >= i) {
                 //manaCount[i]
             }   
             
             
-        } 
+        }  */
     }
         
     
     public void manaUpgrade() {
-        for (float i = manaCount.Count ; i < player.maxMana; i += 1) {
-            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+        
+            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * (manaCount.Count + 1)), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
             manaOrbNew.transform.SetParent(manaOrbPos.transform);
+            manaOrbNew.GetComponent<ManaCell>().index = manaCount.Count + 1;
             //new Vector2(6,2);
             //manaOrbNew.transform.set-
             manaCount.Add(manaOrbNew);
             
-        }
+        
     }
 
     //Debug Display Toggle Method. 

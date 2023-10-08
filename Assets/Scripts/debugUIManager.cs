@@ -18,7 +18,7 @@ public class debugUIManager : MonoBehaviour
         _debugVelY.text = "Velocity Y: " + player.GetComponent<Rigidbody2D>().velocityY.ToString();
         _debugVelX.text = "Velocity X: " + player.GetComponent<Rigidbody2D>().velocityX.ToString();
         _debugHealth.text = "Health: " + player.health + " / " + player.maxHealth;
-        _debugMana.text = "Mana: " + player.mana + " / " + player.maxMana;
+        _debugMana.text = "Mana: " + player.manaCells + " / " + player.maxMana;
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString();
     }
@@ -31,7 +31,7 @@ public class debugUIManager : MonoBehaviour
         _debugVelY.text = "Velocity Y: " + player.GetComponent<Rigidbody2D>().velocityY.ToString();
         _debugVelX.text = "Velocity X: " + player.GetComponent<Rigidbody2D>().velocityX.ToString();
         _debugHealth.text = "Health: " + player.health + " / " + player.maxHealth;
-        _debugMana.text = "Mana: " + string.Join(", ", player.manaStatus) + " / " + player.maxMana;
+        _debugMana.text = "Mana: " + string.Join(", ", player.manaCells) + " / " + player.maxMana;
         _debugTime.text = "Time: " + Time.time.ToString();
         _debugFrames.text = "Frame count: " + Time.frameCount.ToString();
     }
