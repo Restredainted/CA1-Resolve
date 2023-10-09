@@ -183,10 +183,14 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         float horizontalInput = Input.GetAxisRaw("Horizontal");
+        anim.SetFloat("Run", Mathf.Abs(horizontalInput));
+        anim.SetBool("isRunning", horizontalInput != 0);
+        anim.SetFloat("JumpLoop", rbody.velocity.y);
+        anim.SetBool("Grounded", isGrounded());
+        
 
         rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
-        anim.SetBool("Walk", horizontalInput != 0);
-
+        
         if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
             flip();
         }
@@ -196,7 +200,7 @@ public class Player : MonoBehaviour
             Debug.Log("Jump input");
             jump();
             //rbody.AddForceY(jumpHeight);
-            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+            //rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
             
         }
 
