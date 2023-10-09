@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
             //https://discussions.unity.com/t/instantiate-as-a-child-of-the-parent/43354
             var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
             manaOrbNew.transform.SetParent(manaOrbPos.transform);
+            manaOrbNew.transform.localScale = new Vector3(1, 1, 1);
             manaOrbNew.GetComponent<ManaUIManager>().index = i;
             //new Vector2(6,2);
             //manaOrbNew.transform.set-
@@ -67,17 +68,17 @@ public class UIManager : MonoBehaviour
 
         //Calculate health Slow damage amount
         if (healthAdjust > player.health) {
-            healthAdjust -= (math.abs(player.health-healthAdjust) / 1.5f * Time.deltaTime) + 0.5f;
+            healthAdjust -= (math.abs((player.health - healthAdjust) / player.maxHealth) / 1.5f * Time.deltaTime) + 0.5f;
         }
         else healthAdjust = player.health;
 
         //Health Bar slow damage
-        healthChange.fillAmount = healthAdjust / 100f;
-        healthChange.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (healthAdjust / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
+        healthChange.fillAmount = healthAdjust / player.maxHealth;
+        healthChange.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (healthAdjust / player.maxHealth), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
 
         //Health Bar Actual Damage
-        healthBar.fillAmount = player.health / 100f;
-        healthBar.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (player.health / 100f), healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
+        healthBar.fillAmount = player.health / player.maxHealth;
+        healthBar.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (player.health / player.maxHealth) , healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
         
         Debug.Log(manaCount.Count);
 
@@ -92,7 +93,7 @@ public class UIManager : MonoBehaviour
     }
         
     
-    public void manaUpgrade() {
+   /*  public void manaUpgrade() {
         
             var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * (manaCount.Count + 1)), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
             manaOrbNew.transform.SetParent(manaOrbPos.transform);
@@ -102,7 +103,7 @@ public class UIManager : MonoBehaviour
             manaCount.Add(manaOrbNew);
             
         
-    }
+    } */
 
     //Debug Display Toggle Method. 
     public void toggleDebug() {

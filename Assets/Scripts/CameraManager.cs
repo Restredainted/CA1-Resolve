@@ -19,11 +19,15 @@ public class CameraManager : MonoBehaviour
     [SerializeField] private Player player;// = GetComponent<Player>;
 
 
-    void Start() {
-        targetPosition = target.TransformPoint(new Vector3(0,2, -10));
+    void Awake() {
+        if (player.getFace()) {
+            targetPosition = target.TransformPoint(new Vector3(5, 2, -10));
+        }    
+        else targetPosition = target.TransformPoint(new Vector3(-5, 2, -10));
+        
     }
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         
         
@@ -32,15 +36,14 @@ public class CameraManager : MonoBehaviour
         
         // Define a target position above and behind the target transform,
         //adjusts for left or right face
-        if (player.getFace() == 1) {
+        if (player.getFace()) {
             targetPosition = target.TransformPoint(new Vector3(5, 2, -10));
         }    
-        else if (player.getFace() == -1) {
-            targetPosition = target.TransformPoint(new Vector3(-5, 2, -10));
-        }   
-        if (Time.timeAsRational.Count % 5 == 0) {
-            Debug.Log("Player Facing: " + player.getFace());
-        }
+        else targetPosition = target.TransformPoint(new Vector3(-5, 2, -10));
+          
+        /* if (Time.timeAsRational.Count % 5 == 0) {
+            Debug.Log("Player Facing right: " + player.getFace());
+         }*/
         
         // Smoothly move the camera towards that target position
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, smoothTime);

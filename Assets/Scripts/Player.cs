@@ -15,18 +15,19 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
-    enum face {none, left, right}; //Enum to get camera facing direction.  
+    //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
     public int maxMana;
     public List<ManaCell> manaCells = new List<ManaCell>();
-    private face playerFace;
+    private bool faceRight = true;
     private bool grounded;
-    public GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
+    private Animator anim;
     
     //Updated movement using the tutorial below.
     //https://www.youtube.com/watch?v=K1xZ-rycYY8
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //frame = 0;
         Debug.Log("Player Start");
@@ -35,14 +36,15 @@ public class Player : MonoBehaviour
         //maxSpeed = 10f;
         //acceleration = 15f; 
         //deceleration = 1.5f;
-        playerFace = face.none;
+        //faceRight = true;
         rbody = GetComponent<Rigidbody2D>();
-        health = 100f;
-        maxHealth = 100f;
+        anim = GetComponent<Animator>();
+        //health = 100f;
+        //maxHealth = 100f;
         maxMana = 3;
         for (int i = 0; i < maxMana; i++) {
-            ManaCell newCell = Instantiate(new ManaCell());
-            manaCells.Add(new ManaCell());
+            //ManaCell newCell = Instantiate(new ManaCell());
+            manaCells.Add(gameObject.AddComponent<ManaCell>());
             manaCells[i].index = i;
         }
         
@@ -56,7 +58,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
-        horizontal = Input.GetAxisRaw("Horizontal");
+        
     
     
         //moved to UIManager Debug.
@@ -94,7 +96,10 @@ public class Player : MonoBehaviour
             
         }
 
-        //Move left input.
+
+
+        //changed out for movement script from class.
+        /* //Move left input.
         if (Input.GetKey(KeyCode.A)) {
             //set face left
             playerFace = face.left;
@@ -113,7 +118,7 @@ public class Player : MonoBehaviour
             //rbody.velocity = Vector2.right * speed;
             
             
-        } 
+        }  */
 
         /* else {
             if (speed > deceleration * Time.deltaTime) {
@@ -137,7 +142,7 @@ public class Player : MonoBehaviour
         //Debug test keys. 
         if (gameManager.debugEnabled) {
 
-            if (Input.GetKeyDown(KeyCode.F3)) {
+            if (Input.GetAxisRaw ("Enable Debug Button 1") > 0) {
                 Debug.Log("Debug Toggle");
                 gameManager.UIManager.toggleDebug();
             }
@@ -177,17 +182,39 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rbody.velocity = new Vector2(horizontal * speed, rbody.velocity.y);
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+
+        rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
+        anim.SetBool("Walk", horizontalInput != 0);
+
+        if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
+            flip();
+        }
+
+        if (Input.GetButtonDown("Jump") && isGrounded()) {
+            //
+            Debug.Log("Jump input");
+            jump();
+            //rbody.AddForceY(jumpHeight);
+            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+            
+        }
+
+
+        
+        //old
+        //rbody.velocity = new Vector2(horizontal * speed, rbody.velocity.y);
     }
 
-    public int getFace() {
-        if (playerFace == face.right) {
+    public bool getFace() {
+        /* if (playerFace == face.right) {
             return 1;
         }
         else if (playerFace == face.left) {
             return -1;
-        }
-        else return 0;
+        } */
+        //else 
+        return faceRight;
     }
 
     //Make player lose speed on wall contact
@@ -204,13 +231,21 @@ public class Player : MonoBehaviour
         return rbody;
     } */
 
+    private void jump() {
+        rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight);
+        anim.SetTrigger("Jump");
+        
+        grounded = false;
+    }
     public void takeDamage(float damage) {
+        anim.SetTrigger("Hurt");
         gameManager.UIManager.healthAdjust = health;
         health -= damage;
         health = Mathf.Clamp(health, 0, maxHealth);
     }
 
     public void heal(float healing) {
+        anim.SetTrigger("Hurt");
         health += healing;
         health = Mathf.Clamp(health, 0, maxHealth);
     }
@@ -234,6 +269,7 @@ public class Player : MonoBehaviour
         for (int i = manaCells.Count; i >=0; i--) {
             if (manaCells[i].ready == true) {
                 manaCells[i].ready = false;
+                manaCells[i].cast();
                 break;
             }
         }
@@ -268,6 +304,8 @@ public class Player : MonoBehaviour
 
     //From movement tutorial, found better functionality through use of sprite.flipX
 
+    //returned and updated from lab class. 
+
     /* private void flip() {
         
         if ( playerFace == face.right && horizontal > 0f || playerFace == face.left && horizontal < 0f) {
@@ -283,5 +321,12 @@ public class Player : MonoBehaviour
         }
 
     } */
+
+    private void flip() {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+        faceRight = !faceRight;
+    }
 
 }

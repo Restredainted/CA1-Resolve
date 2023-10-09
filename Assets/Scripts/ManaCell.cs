@@ -29,7 +29,8 @@ public class ManaCell : MonoBehaviour
         }
     }
 
-    void cast() {
+    public void cast() {
+        Debug.Log("Debug Spell Cast");
         recharge = 0;
         ready = false;
     }

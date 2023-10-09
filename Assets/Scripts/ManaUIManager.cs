@@ -11,9 +11,9 @@ public class ManaUIManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        gameManager = FindFirstObjectByType<GameManager>();
         //_manaBG.transform
     }
 
