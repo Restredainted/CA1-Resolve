@@ -284,4 +284,5 @@ MonoBehaviour:
   _manaCharge: {fileID: 8246634009612571643}
   _manaReady: {fileID: 4051085641704106458}
   index: 0
+  blinkingColor: {r: 1, g: 0, b: 0, a: 0}
   gameManager: {fileID: 0}

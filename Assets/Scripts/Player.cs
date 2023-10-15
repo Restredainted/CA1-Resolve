@@ -11,12 +11,12 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, manaCharge;
+    public float health, maxHealth, ultMaxHealth, manaCharge;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
     //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
-    public int maxMana;
+    public int maxMana, ultMaxMana;
     public List<ManaCell> manaCells = new List<ManaCell>();
     private bool faceRight = true;
     private bool grounded;
@@ -41,11 +41,12 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         //health = 100f;
         //maxHealth = 100f;
-        maxMana = 3;
+        //maxMana = 3;
         for (int i = 0; i < maxMana; i++) {
             //ManaCell newCell = Instantiate(new ManaCell());
             manaCells.Add(gameObject.AddComponent<ManaCell>());
             manaCells[i].index = i;
+            Debug.Log("Mana Added - Total Mana:" + manaCells.Count);
         }
         
         //keep player object upright. 
@@ -142,7 +143,7 @@ public class Player : MonoBehaviour
         //Debug test keys. 
         if (gameManager.debugEnabled) {
 
-            if (Input.GetAxisRaw ("Enable Debug Button 1") > 0) {
+            if (Input.GetKeyDown(KeyCode.F3)) {
                 Debug.Log("Debug Toggle");
                 gameManager.UIManager.toggleDebug();
             }
@@ -160,14 +161,23 @@ public class Player : MonoBehaviour
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad4)) {
-                if (manaAvailable()) {
-                    manaCost();
-                }
-                
+                manaCost(1);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad5)) {
+                manaCost(3);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad6)) {
                 manaHeal(1);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Keypad9)) {
+                manaUpgrade();
+            }
+
+            if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+                healthUpgrade(15);
             }
 
         }
@@ -241,6 +251,8 @@ public class Player : MonoBehaviour
         
         grounded = false;
     }
+
+    //Health System Methods.
     public void takeDamage(float damage) {
         anim.SetTrigger("Hurt");
         gameManager.UIManager.healthAdjust = health;
@@ -258,35 +270,89 @@ public class Player : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
     }
 
-    public bool manaAvailable() {
-        
-        for (int i = 0; i <= manaCells.Count; i++) {
-            if (manaCells[i].ready == true) {
-                return true;
-                
-            }
+    public void healthUpgrade(float up) {
+        if (maxHealth == ultMaxHealth) {
+            healFull();
         }
-        return false;
+        else {
+            maxHealth += up;
+            healFull();
+        }
     }
 
-    public void manaCost() {
-        for (int i = manaCells.Count; i >=0; i--) {
+
+    //Magic System Methods
+    public int manaAvailable() {
+
+        int count = 0;
+        for (int i = 0; i <= manaCells.Count-1; i++) {
             if (manaCells[i].ready == true) {
-                manaCells[i].ready = false;
-                manaCells[i].cast();
-                break;
+                count++;
             }
         }
+        Debug.Log("Mana Available: " + count);
+        return count;
+    }
+
+    public void manaCost(int cost) {
+
+        int spend = cost;
+
+        if (cost <= manaAvailable()) {
+            
+            for (int i = manaCells.Count - 1; i >= 0; i--) {
+            
+                if (manaCells[i].ready == true) {
+                    Debug.Log("Mana cast");
+                    manaCells[i].ready = false;
+                    manaCells[i].cast();
+                    spend -= 1;
+                    
+                    if (spend == 0) break;
+
+                }
+            }
+        }
+
+        //couldn't get blinking to work. Everytime it was run in unity the entire engine would hang - not helpful
+        /* else {
+            gameManager.UIManager.manaBlink(cost);
+        } */
         /* 
         mana -= spend;
         mana = Mathf.Clamp(mana, 0, maxMana); */
     }
 
     public void manaHeal(int restore) {
-        for (int i = 0; i < manaCells.Count;i++) {
+        for (int i = 0; i < manaCells.Count; i++) {
             manaCells[i].ready = true;
         }
     }
+
+    public void manaUpgrade() {
+        
+        if (maxMana == ultMaxMana) {
+            manaHeal(maxMana - 1);
+        }
+
+        else {
+
+            maxMana += 1;
+        
+            manaCells.Add(gameObject.AddComponent<ManaCell>());
+            manaCells[manaCells.Count - 1].index = manaCells.Count - 1;
+            gameManager.UIManager.addManaOrb();
+            Debug.Log("Mana Added - Total Mana:" + manaCells.Count);
+       
+        }
+
+    }
+
+    
+
+
+
+
     /* 
     public void manaRecharge() {
         for (int i = 0; i < manaCells.Count; i++) {

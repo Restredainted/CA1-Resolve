@@ -12,7 +12,7 @@ public class ManaCell : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        player = GetComponent<Player>();
+        player = FindAnyObjectByType<Player>();
         ready = true;
         recharge = 0;
 
@@ -22,9 +22,9 @@ public class ManaCell : MonoBehaviour
     void FixedUpdate()
     {
         if (!ready) {
-            recharge += Time.fixedUnscaledTime;
+            recharge += Time.deltaTime;
         }
-        if (recharge > player.manaCharge) {
+        if (recharge >= player.manaCharge) {
             ready = true;
         }
     }

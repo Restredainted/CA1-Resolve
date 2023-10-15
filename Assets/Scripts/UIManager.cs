@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
 
             //Drawn successfully using below forum post:
             //https://discussions.unity.com/t/instantiate-as-a-child-of-the-parent/43354
-            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (45 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
             manaOrbNew.transform.SetParent(manaOrbPos.transform);
             manaOrbNew.transform.localScale = new Vector3(1, 1, 1);
             manaOrbNew.GetComponent<ManaUIManager>().index = i;
@@ -80,7 +80,7 @@ public class UIManager : MonoBehaviour
         healthBar.fillAmount = player.health / player.maxHealth;
         healthBar.transform.localPosition = new Vector3(healthBarFullPos.transform.localPosition.x * (player.health / player.maxHealth) , healthBar.transform.localPosition.y, healthBar.transform.localPosition.z);
         
-        Debug.Log(manaCount.Count);
+        //Debug.Log(manaCount.Count);
 
        /*  if (Time.time % 10 == 0) {}
         for (int i = 0; i <= 2; i++) {
@@ -117,5 +117,23 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void addManaOrb() {
+
+        var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (50 * manaCount.Count), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+        manaOrbNew.transform.SetParent(manaOrbPos.transform);
+        manaOrbNew.transform.localScale = new Vector3(1, 1, 1);
+        manaOrbNew.GetComponent<ManaUIManager>().index = manaCount.Count;
+        manaCount.Add(manaOrbNew);
+    }
+
+    //couldn't get blinking to work. Everytime it was run in unity the entire engine would hang - not helpful
+    /* public void manaBlink(int cost) {
+        for (int i = 0; i < cost; i += 1) {
+            if (player.manaCells[i].ready == false){
+                manaCount[i].GetComponent<ManaUIManager>().blink();
+            }
+        }
+    }
+ */
 
 }
