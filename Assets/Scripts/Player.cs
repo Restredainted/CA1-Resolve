@@ -11,10 +11,11 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, ultMaxHealth, manaCharge;
+    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private GameObject spell;
     //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
     public int maxMana, ultMaxMana;
     public List<ManaCell> manaCells = new List<ManaCell>();
@@ -346,6 +347,10 @@ public class Player : MonoBehaviour
        
         }
 
+    }
+
+    private void CastFireball() {
+        var fireball = Instantiate<Fireball>() ;
     }
 
     

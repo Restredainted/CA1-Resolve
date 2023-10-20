@@ -28,7 +28,8 @@ public class UIManager : MonoBehaviour
 
             //Drawn successfully using below forum post:
             //https://discussions.unity.com/t/instantiate-as-a-child-of-the-parent/43354
-            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (45 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+            var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x 
+            + (60 * i), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
             manaOrbNew.transform.SetParent(manaOrbPos.transform);
             manaOrbNew.transform.localScale = new Vector3(1, 1, 1);
             manaOrbNew.GetComponent<ManaUIManager>().index = i;
@@ -119,7 +120,7 @@ public class UIManager : MonoBehaviour
 
     public void addManaOrb() {
 
-        var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (50 * manaCount.Count), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
+        var manaOrbNew = Instantiate(manaOrb, new Vector2(manaOrbPos.transform.position.x + (60 * manaCount.Count), manaOrbPos.transform.position.y), manaOrbPos.transform.rotation);
         manaOrbNew.transform.SetParent(manaOrbPos.transform);
         manaOrbNew.transform.localScale = new Vector3(1, 1, 1);
         manaOrbNew.GetComponent<ManaUIManager>().index = manaCount.Count;

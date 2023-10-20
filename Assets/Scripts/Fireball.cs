@@ -10,7 +10,9 @@ public class Fireball : MonoBehaviour
     [SerializeField] private Collision2D collision2D;
     [SerializeField] private Transform hit;
     [SerializeField] private GameObject owner;
-    [SerializeField] private bool faceRight;
+
+    private Player gamePlayer; 
+    //[SerializeField] private bool faceRight; //Calls player method directly on spawn
 
 
 
@@ -19,9 +21,15 @@ public class Fireball : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        gamePlayer.spellCharge
         //owner = parent;
-        faceRight = owner.GetComponent<Player>().getFace();
+        if (owner.GetComponent<Player>().getFace()) {
+            flip();
+        }
+
         collision2D = GetComponent<Collision2D>();
+
         if (damage > 1) {
             transform.localScale = transform.localScale * damage;
         }
@@ -41,6 +49,13 @@ public class Fireball : MonoBehaviour
         //anim poof
         //do damage to the collided
         //other
+    }
+
+    private void flip() {
+        Vector3 currentScale = gameObject.transform.localScale;
+        currentScale.x *= -1;
+        gameObject.transform.localScale = currentScale;
+        
     }
     
 }

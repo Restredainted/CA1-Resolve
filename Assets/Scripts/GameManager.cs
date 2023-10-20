@@ -2,11 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.SceneManagement;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+    [Header("Game States")]
+    public bool isPaused;
+    public bool isGameOver;
     public Player player;
     public UIManager UIManager;
     
@@ -19,7 +23,17 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else {
+            Destroy(gameObject);
+            return;
+        }
         Application.targetFrameRate = 60;
+
+
     }
 
     void Start() {
@@ -33,12 +47,47 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         updateCount += 1;
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (isPaused) {
+                ResumeGame();
+            }
+            else {
+                PauseGame();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R)) {
+            
+        }
     }
 
     // Increase the number of calls to FixedUpdate.
     void FixedUpdate()
     {
         fixedUpdateCount += 1;
+    }
+
+    public void PauseGame() {
+
+        isPaused = true;
+        Time.timeScale = 0f;
+
+        //Pause Menu call
+    }
+
+    public void ResumeGame() {
+        isPaused = false;
+        Time.timeScale = 1f;
+        //hide pause menu
+    }
+
+    public void GameOver() {
+        isGameOver = true;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void ReturnMainMenu() {
+        SceneManager.LoadScene("MainMenu");
     }
 
     // Show the number of calls to both messages.
