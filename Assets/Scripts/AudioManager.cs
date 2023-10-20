@@ -14,9 +14,9 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         if (instance == null) {
-            instance =
+            //instance =
         }
-        else
+        //else
     }
 
     // Update is called once per frame

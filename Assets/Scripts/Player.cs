@@ -11,16 +11,15 @@ public class Player : MonoBehaviour
     public float jumpHeight, speed;
     private float horizontal;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge;
+    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge, spellDelay;
     [SerializeField] private Rigidbody2D rbody;
-    [SerializeField] private Transform groundCheck;
+    [SerializeField] private Transform groundCheck, magicSpawn;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private GameObject spell;
+    [SerializeField] private GameObject fireSpell;
     //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
     public int maxMana, ultMaxMana;
     public List<ManaCell> manaCells = new List<ManaCell>();
-    private bool faceRight = true;
-    private bool grounded;
+    private bool faceRight = true, grounded, spellReady, spellCharging;
     [SerializeField] private GameManager gameManager;
     private Animator anim;
     
@@ -43,7 +42,9 @@ public class Player : MonoBehaviour
         //health = 100f;
         //maxHealth = 100f;
         //maxMana = 3;
+        
         for (int i = 0; i < maxMana; i++) {
+
             //ManaCell newCell = Instantiate(new ManaCell());
             manaCells.Add(gameObject.AddComponent<ManaCell>());
             manaCells[i].index = i;
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour
 
 
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) && isGrounded()) {
-            //
+            
             Debug.Log("Jump input");
             //rbody.AddForceY(jumpHeight);
             rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
@@ -80,8 +81,8 @@ public class Player : MonoBehaviour
 
 
         //increases jump height longer the key's held. 
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonUp("Jump")) && rbody.velocity.y > 0f)
-        {
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonUp("Jump")) && rbody.velocity.y > 0f) {
+
             rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.25f);
         }
 
@@ -96,6 +97,49 @@ public class Player : MonoBehaviour
         //Maybe crouch input?
         if (Input.GetKey(KeyCode.S)) {
             
+        }
+
+
+        if (spellDelay >= 0 ) { 
+
+            spellReady = false;
+            spellDelay -= Time.deltaTime;
+        }
+
+        else if (!spellCharging) {
+
+            spellReady = true;
+            spellCharge = 0;
+        }
+
+
+        //Start charging spell when key pressed and held, shoot when released or after 3 seconds. 
+        if (Input.GetButtonDown("Fire2") && spellReady) {
+
+            if (manaAvailable() >= 1) {
+
+                spellCharging = true;
+                //spellCharge = 0;
+            }
+        }
+
+        if(spellCharging) {
+
+            spellCharge += Time.deltaTime;
+        }
+
+        
+        if ((Input.GetButtonUp("Fire2") || spellCharge >= 3) && spellCharge > 0 && spellReady) {
+
+            if (manaAvailable() == 1) {
+
+                spellCharge = 1;
+            }
+
+            CastFireball();
+            spellDelay = 0.5f;
+            spellCharging = false;
+            spellReady = false;
         }
 
 
@@ -350,7 +394,20 @@ public class Player : MonoBehaviour
     }
 
     private void CastFireball() {
-        var fireball = Instantiate<Fireball>() ;
+
+        if(spellCharge <= 1) {
+
+            manaCost(1);
+            Instantiate(fireSpell, magicSpawn.position, Quaternion.identity);
+        }
+
+        else {
+
+            manaCost(2);
+            Instantiate(fireSpell, magicSpawn.position, Quaternion.identity);
+        }
+
+        
     }
 
     
