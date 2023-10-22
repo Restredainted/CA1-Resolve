@@ -30,6 +30,7 @@ public class Enemy_Slime : MonoBehaviour
     [SerializeField] private float maxHealth;
     [SerializeField] private float damage;
     private float health;
+    [SerializeField] private float despawnTimer;
     //private bool isAlive; //made method
     
     
@@ -72,6 +73,13 @@ public class Enemy_Slime : MonoBehaviour
             }
 
         } 
+        else {
+            despawnTimer -= Time.deltaTime;
+
+            if (despawnTimer <= 0) {
+                Destroy(this.gameObject);
+            }
+        }
 
         
     }
@@ -199,15 +207,21 @@ public class Enemy_Slime : MonoBehaviour
 
     private bool isAlive() {
 
+
         if (Physics2D.OverlapCircle(transform.position, 0, gameManager.whatIsDeath())) {
 
+            anim.SetBool("Dead", true);
             return false;
         }
         else if (health <= 0) {
 
+            anim.SetBool("Dead", true);
             return false;
         }
-        else return true;
+        else {
+            
+            return true;
+        }
     }
     
     
