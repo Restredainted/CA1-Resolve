@@ -9,17 +9,17 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float jumpHeight, speed;
-    private float horizontal;
+    private float horizontal, actionDelay;
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge, spellDelay;
+    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge, spellDelay, meleeDelay;
     [SerializeField] private Rigidbody2D rbody;
     [SerializeField] private Transform groundCheck, magicSpawn;
     [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private GameObject fireSpell;
+    [SerializeField] private GameObject meleeAttack, fireSpell;
     //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
     public int maxMana, ultMaxMana;
     public List<ManaCell> manaCells = new List<ManaCell>();
-    private bool faceRight = true, grounded, spellReady, spellCharging;
+    private bool faceRight = true, grounded, actionReady, spellCharging;
     [SerializeField] private GameManager gameManager;
     private Animator anim;
     
@@ -100,21 +100,27 @@ public class Player : MonoBehaviour
         }
 
 
-        if (spellDelay >= 0 ) { 
+        if (actionDelay >= 0 ) { 
 
-            spellReady = false;
-            spellDelay -= Time.deltaTime;
+            actionReady = false;
+            actionDelay -= Time.deltaTime;
         }
 
         else if (!spellCharging) {
 
-            spellReady = true;
+            actionReady = true;
             spellCharge = 0;
         }
 
+        //Standard Melee attack
+        if (Input.GetButtonDown("Fire1") && actionReady) {
+
+            Instantiate(meleeAttack, magicSpawn.position, Quaternion.identity);
+            actionDelay = meleeDelay;
+        }
 
         //Start charging spell when key pressed and held, shoot when released or after 3 seconds. 
-        if (Input.GetButtonDown("Fire2") && spellReady) {
+        if (Input.GetButtonDown("Fire2") && actionReady) {
 
             if (manaAvailable() >= 1) {
 
@@ -129,7 +135,7 @@ public class Player : MonoBehaviour
         }
 
         
-        if ((Input.GetButtonUp("Fire2") || spellCharge >= 3) && spellCharge > 0 && spellReady) {
+        if ((Input.GetButtonUp("Fire2") || spellCharge >= 3) && spellCharge > 0 && actionReady) {
 
             if (manaAvailable() == 1) {
 
@@ -137,9 +143,9 @@ public class Player : MonoBehaviour
             }
 
             CastFireball();
-            spellDelay = 0.5f;
+            actionDelay = spellDelay;
             spellCharging = false;
-            spellReady = false;
+            actionReady = false;
         }
 
 
@@ -300,7 +306,7 @@ public class Player : MonoBehaviour
     //Health System Methods.
     public void takeDamage(float damage) {
         anim.SetTrigger("Hurt");
-        gameManager.UIManager.healthAdjust = health;
+        //gameManager.UIManager.healthAdjust = health;
         health -= damage;
         health = Mathf.Clamp(health, 0, maxHealth);
     }

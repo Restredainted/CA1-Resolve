@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1769237367180183298}
   - component: {fileID: 1076420606867716159}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
@@ -97,9 +97,9 @@ GameObject:
   - component: {fileID: 1903648191391225385}
   - component: {fileID: 1137920770303667728}
   - component: {fileID: 4253186866887933492}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FX_Spell_Fireball
-  m_TagString: Untagged
+  m_TagString: Pl_Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

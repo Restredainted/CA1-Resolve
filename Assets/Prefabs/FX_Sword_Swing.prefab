@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 674755699986275934}
   - component: {fileID: 2507135065326263981}
   - component: {fileID: 5066465587187999832}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FX_Sword_Swing
-  m_TagString: Untagged
+  m_TagString: Pl_Attack
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +32,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &674755699986275934
 SpriteRenderer:
@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8940a21bcbbbce946b28d969d0bce532, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 15
+  expireTime: 0.15
 --- !u!60 &5066465587187999832
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -114,20 +116,20 @@ PolygonCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 0
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 0
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 128
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 128
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
@@ -145,10 +147,10 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: 0.17193222, y: 0.975982}
-      - {x: -0.3928008, y: 1.4794586}
-      - {x: -0.53797436, y: 1.4794583}
-      - {x: -0.53797436, y: -1.4714906}
-      - {x: -0.40201235, y: -1.4754744}
+      - {x: -0.15686989, y: 1.3437468}
+      - {x: -0.2812338, y: 1.3437253}
+      - {x: -0.28080034, y: -1.2812037}
+      - {x: -0.15571499, y: -1.281316}
       - {x: 0.16348219, y: -0.9129744}
       - {x: 0.5339904, y: -0.13531539}
       - {x: 0.53125, y: 0.3218506}
