@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
-public class playerDetect : MonoBehaviour
+public class PlayerDetect : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public bool playerClose;
+    
+   
+    public void OnCollisionEnter2D(Collision2D other) {
+        if (other.collider.tag == "Player") {
+            playerClose = true;
+        Debug.Log("PlayerClose");
+        }
     }
 }
