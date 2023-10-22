@@ -41,6 +41,7 @@ public class Sword_Swing : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
 
+        other.gameObject.GetComponent<Enemy_Slime>().takeDamage(damage);
         //other.gameObject.GetComponent<enemyController>().
         //do damage to the collided
         //other

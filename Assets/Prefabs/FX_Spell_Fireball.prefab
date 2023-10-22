@@ -207,23 +207,23 @@ CircleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 136
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 64
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 191
   m_ForceReceiveLayers:
     serializedVersion: 2
     m_Bits: 63
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 191
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 63
+    m_Bits: 191
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0

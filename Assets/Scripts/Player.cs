@@ -8,21 +8,46 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    [Header("Movement")]
     public float jumpHeight, speed;
-    private float horizontal, actionDelay;
+    [SerializeField] private Transform groundCheck;
+    private bool faceRight = true;
+    //private bool grounded; //using physics overlap method. 
+    //private float horizontal; 
     //public float maxSpeed, acceleration, deceleration;
-    public float health, maxHealth, ultMaxHealth, manaCharge, spellCharge, spellDelay, meleeDelay;
-    [SerializeField] private Rigidbody2D rbody;
-    [SerializeField] private Transform groundCheck, magicSpawn;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private GameObject meleeAttack, fireSpell;
+    //[SerializeField] private LayerMask groundLayer; //moved to gameManager
     //enum face {none, left, right}; //Enum to get camera facing direction.   changed to bool.
+    
+    [Header("Health System")]
+    public float health; 
+    public float maxHealth; 
+    public float ultMaxHealth; 
+    [Header("Combat System")]
+    [SerializeField] private Transform attackSpawn;
+    [SerializeField] private float knockBackForce;
+    [SerializeField] private float meleeDelay;
+    
+    private bool actionReady;
+    private float actionDelay;
+    
+    [Header("Magic system")]
     public int maxMana, ultMaxMana;
+    public float maxManaCharge;
+    [SerializeField] private float spellDelay; 
+    public float manaCharge; 
+    public float spellCharge; 
+    private bool spellCharging;
     public List<ManaCell> manaCells = new List<ManaCell>();
-    private bool faceRight = true, grounded, actionReady, spellCharging;
+
+    [Header("Attack Prefabs")]
+    [SerializeField] private GameObject meleeAttack;
+    [SerializeField] private GameObject fireSpell;
+    [Header("Game Manager")]
     [SerializeField] private GameManager gameManager;
     private Animator anim;
+    private Rigidbody2D rbody;
     
+
     //Updated movement using the tutorial below.
     //https://www.youtube.com/watch?v=K1xZ-rycYY8
 
@@ -62,8 +87,6 @@ public class Player : MonoBehaviour
     void Update() 
     {
         
-    
-    
         //moved to UIManager Debug.
         /* if (frame % 60 == 0) {
             Debug.Log("Player X Velocity: " + rbody.velocityX);
@@ -102,6 +125,7 @@ public class Player : MonoBehaviour
 
         if (actionDelay >= 0 ) { 
 
+            spellCharge = 0;
             actionReady = false;
             actionDelay -= Time.deltaTime;
         }
@@ -109,13 +133,12 @@ public class Player : MonoBehaviour
         else if (!spellCharging) {
 
             actionReady = true;
-            spellCharge = 0;
         }
 
         //Standard Melee attack
         if (Input.GetButtonDown("Fire1") && actionReady) {
 
-            Instantiate(meleeAttack, magicSpawn.position, Quaternion.identity);
+            Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
             actionDelay = meleeDelay;
         }
 
@@ -192,42 +215,51 @@ public class Player : MonoBehaviour
         
 
         //Debug test keys. 
-        if (gameManager.debugEnabled) {
+        if (Application.isEditor) {
 
             if (Input.GetKeyDown(KeyCode.F3)) {
+
                 Debug.Log("Debug Toggle");
                 gameManager.UIManager.toggleDebug();
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad1)) {
+
                 takeDamage(10);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad2)) {
+
                 takeDamage(50);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad3)) {
+
                 healFull();
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad4)) {
+
                 manaCost(1);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad5)) {
+
                 manaCost(3);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad6)) {
+
                 manaHeal(1);
             }
 
             if (Input.GetKeyDown(KeyCode.Keypad9)) {
+
                 manaUpgrade();
             }
 
             if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+
                 healthUpgrade(15);
             }
 
@@ -253,6 +285,7 @@ public class Player : MonoBehaviour
         rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
         
         if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
+
             flip();
         }
 
@@ -265,13 +298,12 @@ public class Player : MonoBehaviour
             
         }
 
-
-        
         //old
         //rbody.velocity = new Vector2(horizontal * speed, rbody.velocity.y);
     }
 
     public bool getFace() {
+
         /* if (playerFace == face.right) {
             return 1;
         }
@@ -297,14 +329,16 @@ public class Player : MonoBehaviour
     } */
 
     private void jump() {
+
         rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight);
         anim.SetTrigger("Jump");
         
-        grounded = false;
+        //grounded = false;
     }
 
     //Health System Methods.
     public void takeDamage(float damage) {
+
         anim.SetTrigger("Hurt");
         //gameManager.UIManager.healthAdjust = health;
         health -= damage;
@@ -312,20 +346,27 @@ public class Player : MonoBehaviour
     }
 
     public void heal(float healing) {
+
         anim.SetTrigger("Hurt");
         health += healing;
         health = Mathf.Clamp(health, 0, maxHealth);
     }
+
     public void healFull() {
+
         health = maxHealth;
         health = Mathf.Clamp(health, 0, maxHealth);
     }
 
     public void healthUpgrade(float up) {
+
         if (maxHealth == ultMaxHealth) {
+
             healFull();
         }
+
         else {
+
             maxHealth += up;
             healFull();
         }
@@ -336,11 +377,15 @@ public class Player : MonoBehaviour
     public int manaAvailable() {
 
         int count = 0;
+
         for (int i = 0; i <= manaCells.Count-1; i++) {
+
             if (manaCells[i].ready == true) {
+
                 count++;
             }
         }
+
         Debug.Log("Mana Available: " + count);
         return count;
     }
@@ -354,6 +399,7 @@ public class Player : MonoBehaviour
             for (int i = manaCells.Count - 1; i >= 0; i--) {
             
                 if (manaCells[i].ready == true) {
+
                     Debug.Log("Mana cast");
                     manaCells[i].ready = false;
                     manaCells[i].cast();
@@ -375,7 +421,9 @@ public class Player : MonoBehaviour
     }
 
     public void manaHeal(int restore) {
+
         for (int i = 0; i < manaCells.Count; i++) {
+
             manaCells[i].ready = true;
         }
     }
@@ -383,6 +431,7 @@ public class Player : MonoBehaviour
     public void manaUpgrade() {
         
         if (maxMana == ultMaxMana) {
+
             manaHeal(maxMana - 1);
         }
 
@@ -404,13 +453,13 @@ public class Player : MonoBehaviour
         if(spellCharge <= 1) {
 
             manaCost(1);
-            Instantiate(fireSpell, magicSpawn.position, Quaternion.identity);
+            Instantiate(fireSpell, attackSpawn.position, Quaternion.identity);
         }
 
         else {
 
             manaCost(2);
-            Instantiate(fireSpell, magicSpawn.position, Quaternion.identity);
+            Instantiate(fireSpell, attackSpawn.position, Quaternion.identity);
         }
 
         
@@ -437,7 +486,8 @@ public class Player : MonoBehaviour
 
 
     private bool isGrounded() {
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+
+        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, gameManager.whatIsGround());
     }
 
     //From movement tutorial, found better functionality through use of sprite.flipX
@@ -461,10 +511,23 @@ public class Player : MonoBehaviour
     } */
 
     private void flip() {
+
         Vector3 currentScale = gameObject.transform.localScale;
         currentScale.x *= -1;
         gameObject.transform.localScale = currentScale;
         faceRight = !faceRight;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+
+        //knockBackForce = other.gameObject.transform;
+
+        if(other.collider.tag == "Enemy")
+        {
+            Vector2 difference = (transform.position - other.transform.position).normalized;
+            Vector2 force = difference * knockBackForce;
+            rbody.AddForce(force, ForceMode2D.Impulse); //if you don't want to take into consideration enemy's mass then use ForceMode.VelocityChange
+        }
     }
 
 }

@@ -11,14 +11,26 @@ public class GameManager : MonoBehaviour
     [Header("Game States")]
     public bool isPaused;
     public bool isGameOver;
+
+    [Header("Primary Game Components")]
     public Player player;
     public UIManager UIManager;
     
-    private float updateCount = 0;
-    private float fixedUpdateCount = 0;
-    private float updateUpdateCountPerSecond;
-    private float updateFixedUpdateCountPerSecond;
-    public bool debugEnabled = false;
+    //Came from a tutorial, unused, not sure what they do.
+    //private float updateCount = 0;
+    //private float fixedUpdateCount = 0;
+    //private float updateUpdateCountPerSecond;
+    //private float updateFixedUpdateCountPerSecond;
+
+    //moved into player scrip, used for debug ui toggle and keys.
+    //private bool debugEnabled = false;
+    
+    [Header("Game Layers")]
+    [SerializeField] private LayerMask groundLayer; 
+    [SerializeField] private LayerMask playerLayer; 
+    [SerializeField] private LayerMask deathLayer; 
+    [SerializeField] private LayerMask waterLayer;
+    [SerializeField] private LayerMask enemyLayer;
 
     // Start is called before the first frame update
     void Awake()
@@ -37,16 +49,18 @@ public class GameManager : MonoBehaviour
     }
 
     void Start() {
-        if (Application.isEditor) {
+        //moved into player
+       /*  if (Application.isEditor) {
             debugEnabled = true;
-        }
+        } */
     }
 
     // Update is called once per frame
     // Increase the number of calls to Update.
     void Update()
     {
-        updateCount += 1;
+        //unused from a tutorial in attempt to get debug overlay to work. 
+        /* updateCount += 1;
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (isPaused) {
                 ResumeGame();
@@ -54,7 +68,7 @@ public class GameManager : MonoBehaviour
             else {
                 PauseGame();
             }
-        }
+        } */
 
         if (Input.GetKeyDown(KeyCode.R)) {
             
@@ -64,7 +78,7 @@ public class GameManager : MonoBehaviour
     // Increase the number of calls to FixedUpdate.
     void FixedUpdate()
     {
-        fixedUpdateCount += 1;
+        //fixedUpdateCount += 1;
     }
 
     public void PauseGame() {
@@ -87,7 +101,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void ReturnMainMenu() {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(0);
     }
 
     // Show the number of calls to both messages.
@@ -99,7 +113,7 @@ public class GameManager : MonoBehaviour
         GUI.Label(new Rect(100, 150, 200, 50), "FixedUpdate: " + updateFixedUpdateCountPerSecond.ToString(), fontSize);
     } */
     // Update both CountsPerSecond values every second.
-    IEnumerator Loop()
+    /* IEnumerator Loop()
     {
         while (true)
         {
@@ -110,5 +124,21 @@ public class GameManager : MonoBehaviour
             updateCount = 0;
             fixedUpdateCount = 0;
         }
+    } */
+
+    public LayerMask whatIsGround() {
+        return groundLayer;
+    }
+    public LayerMask whatIsPlayer() {
+        return playerLayer;
+    }
+    public LayerMask whatIsDeath() {
+        return deathLayer;
+    }
+    public LayerMask whatIsWater() {
+        return waterLayer;
+    }
+    public LayerMask whatIsEnemy() {
+        return enemyLayer;
     }
 }

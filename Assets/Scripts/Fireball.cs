@@ -9,9 +9,9 @@ public class Fireball : MonoBehaviour
     [SerializeField] private float speed, charge, expireTime;
     //private Collision2D collision2D;
     //[SerializeField] private Transform hit; //Using oncollisionEnter2D instead
-    private Player player; 
+    private GameManager gameManager; 
     private bool expired;
-    private bool faceRight; //Calls player method directly on spawn
+    private bool faceRight; //Calls gameManager method directly on spawn
 
 
 
@@ -21,9 +21,9 @@ public class Fireball : MonoBehaviour
     void Start()
     {
 
-        player = FindAnyObjectByType<Player>();
-        faceRight = !player.getFace();
-        charge = player.spellCharge;
+        gameManager = FindAnyObjectByType<GameManager>();
+        faceRight = !gameManager.player.getFace();
+        charge = gameManager.player.spellCharge;
         
         expired = false;
         
@@ -88,6 +88,10 @@ public class Fireball : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D other) {
         speed = 0;
         expired = true;
+
+        other.gameObject.GetComponent<Enemy_Slime>().takeDamage(damage);
+
+        
         //anim poof
         //do damage to the collided
         //other

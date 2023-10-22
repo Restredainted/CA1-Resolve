@@ -346,6 +346,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SS_Enemies_9
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 200
+        width: 14
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 950a0b0623a442d4c80deda6115bffec
+      internalID: -1534238582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Enemies_10
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 200
+        width: 14
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faa306520ed22fe4fac5d21334e43fe9
+      internalID: 1829486507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Enemies_11
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 200
+        width: 14
+        height: 11
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 074cce41a6f7e844f9022d4ea585fb0c
+      internalID: -330011917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -359,6 +422,8 @@ TextureImporter:
     nameFileIdTable:
       SS_Enemies_0: 8393523195600266474
       SS_Enemies_1: -3128273385220907165
+      SS_Enemies_10: 1829486507
+      SS_Enemies_11: -330011917
       SS_Enemies_2: -7602081604541673732
       SS_Enemies_3: 5840956855744526593
       SS_Enemies_4: -6002751191381402628
@@ -366,6 +431,7 @@ TextureImporter:
       SS_Enemies_6: 6731259230006538593
       SS_Enemies_7: -2958167831668646404
       SS_Enemies_8: -1001315344464849224
+      SS_Enemies_9: -1534238582
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy_Slime : MonoBehaviour
@@ -12,7 +13,6 @@ public class Enemy_Slime : MonoBehaviour
     [SerializeField] private float stuckDistance;
     [SerializeField] private float groundCheckDistance;
     [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
     [SerializeField] private float delayTimer;
     private float prevPos;
     private bool direction;
@@ -30,6 +30,7 @@ public class Enemy_Slime : MonoBehaviour
     [SerializeField] private float maxHealth;
     [SerializeField] private float damage;
     private float health;
+    //private bool isAlive; //made method
     
     
 
@@ -46,27 +47,31 @@ public class Enemy_Slime : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        /* if (playerClose()) {
-            
-        } */
-        //Debug.Log(isGrounded());
+        if (isAlive()) {
+                
+            /* if (playerClose()) {
+                
+            } */
+            Debug.Log(isGrounded());
 
-        if (delayTimer <= 0) {
+            if (delayTimer <= 0 && isGrounded()) {
 
-            if (!hasMoved()) {
-
-                direction = !direction;
+                if (!hasMoved()) {
+                    direction = !direction;
+                }
+                calcJump();
             }
-            calcJump();
-        }
 
-        else if (isGrounded()) {
+            else if (isGrounded()) {
 
-            
-            
-            anim.SetBool("Jumping", false);
-            delayTimer -= Time.deltaTime;
-        }
+                
+                
+                anim.SetBool("Jumping", false);
+                anim.SetBool("Knockback", false);
+                delayTimer -= Time.deltaTime;
+            }
+
+        } 
 
         
     }
@@ -82,7 +87,7 @@ public class Enemy_Slime : MonoBehaviour
             if (playerClose()) {
                 
                 // if () { 
-                //Debug.Log("PlayerCloseJump");
+                Debug.Log("PlayerCloseJump");
                 jump(gameManager.player.transform.position.x < transform.position.x);
                 
                 /*  }
@@ -121,13 +126,13 @@ public class Enemy_Slime : MonoBehaviour
         //Otherwise it will just continue jumping forward. 
         if (direction) {
 
-            //Debug.Log("JumpLeft");
+            Debug.Log("JumpLeft");
             rbody.AddRelativeForceX(-jumpDistance);
         }
             
         else {
 
-            //Debug.Log("JumpRight");
+            Debug.Log("JumpRight");
             rbody.AddRelativeForceX(jumpDistance);
         }
 
@@ -147,9 +152,10 @@ public class Enemy_Slime : MonoBehaviour
         faceRight = !faceRight;
     } */
 
-    private void takeDamage(float damage) {
+    public void takeDamage(float damage) {
 
         health -= damage;
+        anim.SetBool("Damage", true);
     }
 
     private void OnCollisionEnter2D(Collision2D other) {
@@ -161,22 +167,25 @@ public class Enemy_Slime : MonoBehaviour
 
     }
 
+    //Detects if the player is nearby. 
     private bool playerClose() {
         
-        return Physics2D.OverlapCircle(transform.position, detectRadius, whatIsPlayer);
+        return Physics2D.OverlapCircle(transform.position, detectRadius, gameManager.whatIsPlayer());
     }
 
     private bool isGrounded() {
+
         //Debug.Log(Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround));
         //bool isGrounded = Physics2D.Raycast(groundCheck.transform.position, Vector2.down, groundCheckDistance, whatIsGround);
         //Debug.Log(isGrounded); 
         
-        return Physics2D.OverlapCircle(groundCheck.transform.position, groundCheckDistance, whatIsGround);
+        return Physics2D.OverlapCircle(groundCheck.transform.position, groundCheckDistance, gameManager.whatIsGround());
     }
 
 
     //Calculate if the owner has moved reasonable distance in it's jump, used to reduce possibilities of getting stuck in a corner. 
     private bool hasMoved() {
+
         Debug.Log("prevPos: " + prevPos + "CurrentPos: " + rbody.transform.position.x);
         Debug.Log("HasMoved: " + Mathf.Abs(prevPos - rbody.transform.position.x));
         return Mathf.Abs(prevPos - rbody.transform.position.x ) > stuckDistance;
@@ -186,6 +195,19 @@ public class Enemy_Slime : MonoBehaviour
             return false;
         }
         else return true; */
+    }
+
+    private bool isAlive() {
+
+        if (Physics2D.OverlapCircle(transform.position, 0, gameManager.whatIsDeath())) {
+
+            return false;
+        }
+        else if (health <= 0) {
+
+            return false;
+        }
+        else return true;
     }
     
     

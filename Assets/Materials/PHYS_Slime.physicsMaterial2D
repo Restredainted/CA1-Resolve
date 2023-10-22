@@ -8,4 +8,4 @@ PhysicsMaterial2D:
   m_PrefabAsset: {fileID: 0}
   m_Name: PHYS_Slime
   friction: 0.7
-  bounciness: 0.25
+  bounciness: 0.05
