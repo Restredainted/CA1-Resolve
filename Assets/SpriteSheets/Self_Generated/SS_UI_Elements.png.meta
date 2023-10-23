@@ -353,10 +353,10 @@ TextureImporter:
       name: SS_UI_Elements_10
       rect:
         serializedVersion: 2
-        x: 8
-        y: 94
-        width: 21
-        height: 34
+        x: 7
+        y: 107
+        width: 91
+        height: 20
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -366,6 +366,69 @@ TextureImporter:
       bones: []
       spriteID: fc776e84e23c7794692402cdd558511d
       internalID: -1799270386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_UI_Elements_11
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 151
+        width: 91
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5cb33f73589a374d9aa9e71f748e575
+      internalID: 488584198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_UI_Elements_12
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 129
+        width: 91
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59fe6b73bd99f9e4a8f7c96599755a48
+      internalID: -1431343439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_UI_Elements_13
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 60
+        width: 21
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8064b6c68952c934cbb2071f3e26c214
+      internalID: -1882089473
       vertices: []
       indices: 
       edges: []
@@ -384,6 +447,9 @@ TextureImporter:
       SS_UI_Elements_0: -1779371308750432013
       SS_UI_Elements_1: -1149663146774827533
       SS_UI_Elements_10: -1799270386
+      SS_UI_Elements_11: 488584198
+      SS_UI_Elements_12: -1431343439
+      SS_UI_Elements_13: -1882089473
       SS_UI_Elements_2: 4732943726416324343
       SS_UI_Elements_3: -1651138750
       SS_UI_Elements_4: 1776738

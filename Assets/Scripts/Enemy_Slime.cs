@@ -68,7 +68,7 @@ public class Enemy_Slime : MonoBehaviour
                 
                 
                 anim.SetBool("Jumping", false);
-                anim.SetBool("Knockback", false);
+                anim.SetBool("Damage", false);
                 delayTimer -= Time.deltaTime;
             }
 
