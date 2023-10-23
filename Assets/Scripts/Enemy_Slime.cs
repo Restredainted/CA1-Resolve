@@ -53,7 +53,7 @@ public class Enemy_Slime : MonoBehaviour
             /* if (playerClose()) {
                 
             } */
-            Debug.Log(isGrounded());
+            //Debug.Log(isGrounded());
 
             if (delayTimer <= 0 && isGrounded()) {
 
