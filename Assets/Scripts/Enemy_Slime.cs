@@ -77,14 +77,16 @@ public class Enemy_Slime : MonoBehaviour
             }
 
         } 
+
         else {
+
             despawnTimer -= Time.deltaTime;
 
             if (despawnTimer <= 0) {
 
                 //sets loot drop position so it drops from the corpse. then instantiates it to spawn it. 
-                drop.transform.position = this.transform.position;
-                Instantiate(drop);
+                //drop.transform.position = this.transform.position; // moved into instantiate, was hardwriting to script. 
+                Instantiate(drop, this.transform.position, Quaternion.identity );
                 Destroy(this.gameObject);
             }
         }

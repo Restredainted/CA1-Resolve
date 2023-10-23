@@ -57,8 +57,13 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
     // Increase the number of calls to Update.
-    /*  void Update()
+    void Update()
     {
+        //if game reloaded and player object has been destroyed will find the next instance of player. 
+        if (player == null) {
+
+            player = FindFirstObjectByType<Player>();
+        }
         //unused from a tutorial in attempt to get debug overlay to work. 
         /* updateCount += 1;
         if (Input.GetKeyDown(KeyCode.Escape)) {
@@ -70,10 +75,10 @@ public class GameManager : MonoBehaviour
             }
         } */
 
-        /* if (Input.GetKeyDown(KeyCode.R)) {
+        /*if (Input.GetKeyDown(KeyCode.R)) {
             
-        }
-    } */
+        }*/
+    } 
 
     // Increase the number of calls to FixedUpdate.
     /*void FixedUpdate()
@@ -113,6 +118,7 @@ public class GameManager : MonoBehaviour
 
     public void restart() {
         ResumeGame();
+        isGameOver = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

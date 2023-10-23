@@ -177,8 +177,12 @@ public class Player : MonoBehaviour
             }
 
 
-            if ( Input.GetKeyDown(KeyCode.Escape)) {
+            if (Input.GetKeyDown(KeyCode.Escape) && !gameManager.isPaused) {
                 gameManager.PauseGame();
+            }
+
+            else if (Input.GetKeyDown(KeyCode.Escape) && gameManager.isPaused) {
+                gameManager.ResumeGame();
             }
 
             
