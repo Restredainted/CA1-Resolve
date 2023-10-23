@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     public float health; 
     public float maxHealth; 
     public float ultMaxHealth; 
+    private bool isAlive;
+
     [Header("Combat System")]
     [SerializeField] private Transform attackSpawn;
     [SerializeField] private float knockBackForce;
@@ -62,8 +64,10 @@ public class Player : MonoBehaviour
         //acceleration = 15f; 
         //deceleration = 1.5f;
         //faceRight = true;
+        gameManager = FindFirstObjectByType<GameManager>();
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        isAlive = true;
         //health = 100f;
         //maxHealth = 100f;
         //maxMana = 3;
@@ -86,220 +90,223 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
+        if (isAlive) {
         
-        //moved to UIManager Debug.
-        /* if (frame % 60 == 0) {
-            Debug.Log("Player X Velocity: " + rbody.velocityX);
-        } */
-        //transform.position.x = transform.position.x + speed*Time.deltaTime;
+            //moved to UIManager Debug.
+            /* if (frame % 60 == 0) {
+                Debug.Log("Player X Velocity: " + rbody.velocityX);
+            } */
+            //transform.position.x = transform.position.x + speed*Time.deltaTime;
 
 
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) && isGrounded()) {
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) && isGrounded()) {
+                
+                Debug.Log("Jump input");
+                //rbody.AddForceY(jumpHeight);
+                rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+                
+            }
+
+
+            //increases jump height longer the key's held. 
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonUp("Jump")) && rbody.velocity.y > 0f) {
+
+                rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.25f);
+            }
+
             
-            Debug.Log("Jump input");
-            //rbody.AddForceY(jumpHeight);
-            rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+
+            //Not sure if this will be used. 
+            //I'm very tempted to make a keybinds menu.
+            if (Input.GetKey(KeyCode.W)) {
+
+            }
+
+            //Maybe crouch input?
+            if (Input.GetKey(KeyCode.S)) {
+                
+            }
+
+
+            if (actionDelay >= 0 ) { 
+
+                spellCharge = 0;
+                actionReady = false;
+                actionDelay -= Time.deltaTime;
+            }
+
+            else if (!spellCharging) {
+
+                actionReady = true;
+            }
+
+            //Standard Melee attack
+            if (Input.GetButtonDown("Fire1") && actionReady) {
+
+                Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
+                actionDelay = meleeDelay;
+            }
+
+            //Start charging spell when key pressed and held, shoot when released or after 3 seconds. 
+            if (Input.GetButtonDown("Fire2") && actionReady) {
+
+                if (manaAvailable() >= 1) {
+
+                    spellCharging = true;
+                    //spellCharge = 0;
+                }
+            }
+
+            if(spellCharging) {
+
+                spellCharge += Time.deltaTime;
+            }
+
             
-        }
+            if ((Input.GetButtonUp("Fire2") || spellCharge >= 3) && spellCharge > 0 && actionReady) {
+
+                if (manaAvailable() == 1) {
+
+                    spellCharge = 1;
+                }
+
+                CastFireball();
+                actionDelay = spellDelay;
+                spellCharging = false;
+                actionReady = false;
+            }
 
 
-        //increases jump height longer the key's held. 
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonUp("Jump")) && rbody.velocity.y > 0f) {
+            if ( Input.GetKeyDown(KeyCode.Escape)) {
+                gameManager.PauseGame();
+            }
 
-            rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.25f);
-        }
-
-        
-
-        //Not sure if this will be used. 
-        //I'm very tempted to make a keybinds menu.
-        if (Input.GetKey(KeyCode.W)) {
-
-        }
-
-        //Maybe crouch input?
-        if (Input.GetKey(KeyCode.S)) {
             
-        }
 
-
-        if (actionDelay >= 0 ) { 
-
-            spellCharge = 0;
-            actionReady = false;
-            actionDelay -= Time.deltaTime;
-        }
-
-        else if (!spellCharging) {
-
-            actionReady = true;
-        }
-
-        //Standard Melee attack
-        if (Input.GetButtonDown("Fire1") && actionReady) {
-
-            Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
-            actionDelay = meleeDelay;
-        }
-
-        //Start charging spell when key pressed and held, shoot when released or after 3 seconds. 
-        if (Input.GetButtonDown("Fire2") && actionReady) {
-
-            if (manaAvailable() >= 1) {
-
-                spellCharging = true;
-                //spellCharge = 0;
+            //changed out for movement script from class.
+            /* //Move left input.
+            if (Input.GetKey(KeyCode.A)) {
+                //set face left
+                playerFace = face.left;
+                GetComponent<SpriteRenderer>().flipX = true;
+                //speed += acceleration * Time.deltaTime;
+                //rbody.velocity = Vector2.left * speed;
+                
+                
             }
-        }
-
-        if(spellCharging) {
-
-            spellCharge += Time.deltaTime;
-        }
-
-        
-        if ((Input.GetButtonUp("Fire2") || spellCharge >= 3) && spellCharge > 0 && actionReady) {
-
-            if (manaAvailable() == 1) {
-
-                spellCharge = 1;
-            }
-
-            CastFireball();
-            actionDelay = spellDelay;
-            spellCharging = false;
-            actionReady = false;
-        }
-
-
-
-        //changed out for movement script from class.
-        /* //Move left input.
-        if (Input.GetKey(KeyCode.A)) {
-            //set face left
-            playerFace = face.left;
-            GetComponent<SpriteRenderer>().flipX = true;
-            //speed += acceleration * Time.deltaTime;
-            //rbody.velocity = Vector2.left * speed;
             
+            //Move right input.
+            else if (Input.GetKey(KeyCode.D)) {
+                playerFace = face.right;
+                GetComponent<SpriteRenderer>().flipX = false;
+                //speed += acceleration * Time.deltaTime;
+                //rbody.velocity = Vector2.right * speed;
+                
+                
+            }  */
+
+            /* else {
+                if (speed > deceleration * Time.deltaTime) {
+                    speed -= deceleration * Time.deltaTime;
+                }
+                else if (speed < -deceleration * Time.deltaTime) {
+                    speed -= deceleration * Time.deltaTime;
+                }
+                else {
+                    speed = 0;
+                    speed = Mathf.Clamp(speed, 0 ,maxSpeed);
+                }
+                //Debug.Log(speed);
+            } */
             
-        }
+            //rbody.velocityX = speed;
+
+            //Debug test keys. 
+            if (Application.isEditor) {
+
+                if (Input.GetKeyDown(KeyCode.F3)) {
+
+                    Debug.Log("Debug Toggle");
+                    gameManager.UIManager.toggleDebug();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad1)) {
+
+                    takeDamage(10);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad2)) {
+
+                    takeDamage(50);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad3)) {
+
+                    healFull();
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad4)) {
+
+                    manaCost(1);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad5)) {
+
+                    manaCost(3);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad6)) {
+
+                    manaHeal(1);
+                }
+
+                if (Input.GetKeyDown(KeyCode.Keypad9)) {
+
+                    manaUpgrade();
+                }
+
+                if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+
+                    healthUpgrade(15);
+                }
+
+            }
+
+            //flip();
         
-        //Move right input.
-        else if (Input.GetKey(KeyCode.D)) {
-            playerFace = face.right;
-            GetComponent<SpriteRenderer>().flipX = false;
-            //speed += acceleration * Time.deltaTime;
-            //rbody.velocity = Vector2.right * speed;
-            
-            
-        }  */
-
-        /* else {
-            if (speed > deceleration * Time.deltaTime) {
-                speed -= deceleration * Time.deltaTime;
-            }
-            else if (speed < -deceleration * Time.deltaTime) {
-                speed -= deceleration * Time.deltaTime;
-            }
-            else {
-                speed = 0;
-                speed = Mathf.Clamp(speed, 0 ,maxSpeed);
-            }
-            //Debug.Log(speed);
-        } */
-        
-        //rbody.velocityX = speed;
-
-        
-        
-
-        //Debug test keys. 
-        if (Application.isEditor) {
-
-            if (Input.GetKeyDown(KeyCode.F3)) {
-
-                Debug.Log("Debug Toggle");
-                gameManager.UIManager.toggleDebug();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad1)) {
-
-                takeDamage(10);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad2)) {
-
-                takeDamage(50);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad3)) {
-
-                healFull();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad4)) {
-
-                manaCost(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad5)) {
-
-                manaCost(3);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad6)) {
-
-                manaHeal(1);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Keypad9)) {
-
-                manaUpgrade();
-            }
-
-            if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
-
-                healthUpgrade(15);
-            }
-
-        }
-
-        
-        
-
-        //flip();
-        
-        
+        }        
     }
 
     private void FixedUpdate()
     {
-        float horizontalInput = Input.GetAxisRaw("Horizontal");
-        anim.SetFloat("Run", Mathf.Abs(horizontalInput));
-        anim.SetBool("isRunning", horizontalInput != 0);
-        anim.SetFloat("JumpLoop", rbody.velocity.y);
-        anim.SetBool("Grounded", isGrounded());
-        
+        if (isAlive) {
 
-        rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
-        
-        if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
-
-            flip();
-        }
-
-        if (Input.GetButtonDown("Jump") && isGrounded()) {
-            //
-            Debug.Log("Jump input");
-            jump();
-            //rbody.AddForceY(jumpHeight);
-            //rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            anim.SetFloat("Run", Mathf.Abs(horizontalInput));
+            anim.SetBool("isRunning", horizontalInput != 0);
+            anim.SetFloat("JumpLoop", rbody.velocity.y);
+            anim.SetBool("Grounded", isGrounded());
             
-        }
 
-        //old
-        //rbody.velocity = new Vector2(horizontal * speed, rbody.velocity.y);
+            rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
+            
+            if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
+
+                flip();
+            }
+
+            if (Input.GetButtonDown("Jump") && isGrounded()) {
+                //
+                Debug.Log("Jump input");
+                jump();
+                //rbody.AddForceY(jumpHeight);
+                //rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
+                
+            }
+
+            //old
+            //rbody.velocity = new Vector2(horizontal * speed, rbody.velocity.y);
+        }
     }
 
     public bool getFace() {
@@ -343,6 +350,12 @@ public class Player : MonoBehaviour
         //gameManager.UIManager.healthAdjust = health;
         health -= damage;
         health = Mathf.Clamp(health, 0, maxHealth);
+
+        if (health <= 0) {
+            isAlive = false;
+            gameManager.GameOver();
+        }
+        
     }
 
     public void heal(float healing) {

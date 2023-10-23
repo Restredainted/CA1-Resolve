@@ -111,14 +111,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5552396706712042609}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.05, y: -1.979, z: 0}
+  m_LocalPosition: {x: 4.7201867, y: -1.2061871, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5760833403831233949}
   - {fileID: 3213700386848434055}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1055622821401860516
 SpriteRenderer:
@@ -217,6 +217,8 @@ MonoBehaviour:
   gameManager: {fileID: 0}
   maxHealth: 50
   damage: 10
+  despawnTimer: 1.5
+  drop: {fileID: 2701239203988297447, guid: b34c81fc2351bbb4dac4dd37f384b148, type: 3}
 --- !u!50 &5986227752101319367
 Rigidbody2D:
   serializedVersion: 4
@@ -264,10 +266,10 @@ CapsuleCollider2D:
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 264
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 264
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295

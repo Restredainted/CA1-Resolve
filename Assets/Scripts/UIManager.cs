@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,9 +11,13 @@ public class UIManager : MonoBehaviour
 {
     [Header("Game Components")]
     //[SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugFrames; //
-    
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject _debugUI;
+    [SerializeField] private GameObject GameUI;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject GameOverMenu;
     [SerializeField] private Player player;
+    
     //public float manaRecharge; 
     //private Transform healthAdjPos, healthBarPos;
 
@@ -37,9 +43,11 @@ public class UIManager : MonoBehaviour
 
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         debugVisible = false;
+        
+        gameManager = FindFirstObjectByType<GameManager>();
         
         for (int i = 0; i < player.maxMana; i += 1) {
 
@@ -141,6 +149,30 @@ public class UIManager : MonoBehaviour
             debugVisible = true;
             _debugUI.SetActive(true);
         }
+    }
+
+    public void togglePause() {
+        //Turn off gameUI and turn on pause Menu
+        // if (gameManager.isPaused) {
+            GameUI.SetActive(!gameManager.isPaused);
+            pauseMenu.SetActive(gameManager.isPaused);
+        /* }
+
+        else {
+            GameUI.SetActive(true);
+            pauseMenu.SetActive(false);
+        } */
+
+
+        //Turn on gameUI and turn off pause Menu
+        
+    }
+
+    public void toggleGameOver() {
+
+        //Turn off gameUI and turn on game over
+        GameUI.SetActive(!gameManager.isGameOver);
+        GameOverMenu.SetActive(gameManager.isGameOver);
     }
 
     public void addManaOrb() {

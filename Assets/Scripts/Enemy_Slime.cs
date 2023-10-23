@@ -32,6 +32,9 @@ public class Enemy_Slime : MonoBehaviour
     private float health;
     [SerializeField] private float despawnTimer;
     //private bool isAlive; //made method
+
+    [Header("Lootables")]
+    [SerializeField] private GameObject drop;
     
     
 
@@ -43,6 +46,7 @@ public class Enemy_Slime : MonoBehaviour
         playerDetect = GetComponentInChildren<PlayerDetect>();
         rbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -77,6 +81,10 @@ public class Enemy_Slime : MonoBehaviour
             despawnTimer -= Time.deltaTime;
 
             if (despawnTimer <= 0) {
+
+                //sets loot drop position so it drops from the corpse. then instantiates it to spawn it. 
+                drop.transform.position = this.transform.position;
+                Instantiate(drop);
                 Destroy(this.gameObject);
             }
         }

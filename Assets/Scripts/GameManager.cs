@@ -48,16 +48,16 @@ public class GameManager : MonoBehaviour
 
     }
 
-    void Start() {
+    /*void Start() {
         //moved into player
-       /*  if (Application.isEditor) {
+         if (Application.isEditor) {
             debugEnabled = true;
-        } */
-    }
+        } 
+    }*/
 
     // Update is called once per frame
     // Increase the number of calls to Update.
-    void Update()
+    /*  void Update()
     {
         //unused from a tutorial in attempt to get debug overlay to work. 
         /* updateCount += 1;
@@ -70,16 +70,16 @@ public class GameManager : MonoBehaviour
             }
         } */
 
-        if (Input.GetKeyDown(KeyCode.R)) {
+        /* if (Input.GetKeyDown(KeyCode.R)) {
             
         }
-    }
+    } */
 
     // Increase the number of calls to FixedUpdate.
-    void FixedUpdate()
+    /*void FixedUpdate()
     {
         //fixedUpdateCount += 1;
-    }
+    }*/
 
     public void PauseGame() {
 
@@ -87,21 +87,33 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         //Pause Menu call
+        UIManager.togglePause();
     }
 
     public void ResumeGame() {
+
         isPaused = false;
         Time.timeScale = 1f;
+        
         //hide pause menu
+        UIManager.togglePause();
     }
 
     public void GameOver() {
+
         isGameOver = true;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        UIManager.toggleGameOver();
+        
     }
 
     public void ReturnMainMenu() {
+        ResumeGame();
         SceneManager.LoadScene(0);
+    }
+
+    public void restart() {
+        ResumeGame();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // Show the number of calls to both messages.
