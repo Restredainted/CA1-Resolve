@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +10,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Game Components")]
     //[SerializeField] private TextMeshProUGUI _debugTime, _debugVelY, _debugVelX, _debugFrames; //
+    public static UIManager instance;
     [SerializeField] private GameManager gameManager;
     [SerializeField] private GameObject _debugUI;
     [SerializeField] private GameObject GameUI;
@@ -45,6 +45,17 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+
+        if (instance == null) {
+
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else {
+            Destroy(gameObject);
+            return;
+        }
+
         debugVisible = false;
         
         gameManager = FindFirstObjectByType<GameManager>();
@@ -141,11 +152,15 @@ public class UIManager : MonoBehaviour
 
     //Debug Display Toggle Method. 
     public void toggleDebug() {
+
         if (debugVisible) {
+            
             debugVisible = false;
             _debugUI.SetActive(false);
         }
+
         else {
+
             debugVisible = true;
             _debugUI.SetActive(true);
         }

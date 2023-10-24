@@ -89,7 +89,9 @@ public class Fireball : MonoBehaviour
         speed = 0;
         expired = true;
 
-        other.gameObject.GetComponent<Enemy_Slime>().takeDamage(damage);
+        if (other.collider.tag == "Enemy") {
+            other.gameObject.GetComponent<Enemy_Slime>().takeDamage(damage);
+        }
 
         
         //anim poof
