@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         //Pause Menu call
-        _UIManager.togglePause();
+        _UIManager.openPause();
     }
 
     public void ResumeGame() {
@@ -106,24 +106,29 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         
         //hide pause menu
-        _UIManager.togglePause();
+        _UIManager.closePause();
     }
 
     public void GameOver() {
 
         isGameOver = true;
-        _UIManager.toggleGameOver();
+        _UIManager.openGameOver();
         
     }
 
     public void ReturnMainMenu() {
         Time.timeScale = 1f;
+        isGameOver = false;
+        isPaused = false;
         SceneManager.LoadScene(0);
     }
 
     public void restart() {
+
         ResumeGame();
+        _UIManager.closeGameOver();
         isGameOver = false;
+        isPaused = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

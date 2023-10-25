@@ -44,5 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 804e50ec87afa1c49bdc315174aa4474, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectRadius: 25
+  detectRadius: 20
+  respawnTimer: 60
   enemyToSpawn: {fileID: 5552396706712042609, guid: f91981d06d98b4e4c8119933a0b23f78, type: 3}

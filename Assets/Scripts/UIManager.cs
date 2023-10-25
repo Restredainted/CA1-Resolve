@@ -170,11 +170,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void togglePause() {
+    public void openPause() {
         //Turn off gameUI and turn on pause Menu
         // if (gameManager.isPaused) {
-            GameUI.SetActive(!gameManager.isPaused);
-            pauseMenu.SetActive(gameManager.isPaused);
+            GameUI.SetActive(false);
+            pauseMenu.SetActive(true);
         /* }
 
         else {
@@ -187,11 +187,25 @@ public class UIManager : MonoBehaviour
         
     }
 
-    public void toggleGameOver() {
+    public void closePause() {
+        
+        //Turn on gameUI and turn off pause Menu
+        GameUI.SetActive(true);
+        pauseMenu.SetActive(false);
+    }
+
+    public void openGameOver() {
 
         //Turn off gameUI and turn on game over
-        GameUI.SetActive(!gameManager.isGameOver);
-        GameOverMenu.SetActive(gameManager.isGameOver);
+        GameUI.SetActive(false);
+        GameOverMenu.SetActive(true);
+    }
+
+    public void closeGameOver() {
+
+        //Turn on gameUI and turn off game over
+        GameUI.SetActive(true);
+        GameOverMenu.SetActive(false);
     }
 
     public void addManaOrb() {
