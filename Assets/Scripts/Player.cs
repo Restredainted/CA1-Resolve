@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
 
     [Header("Combat System")]
     [SerializeField] private Transform attackSpawn;
+    [SerializeField] private Transform attackSpawnUp;
     [SerializeField] private float knockBackForce;
     [SerializeField] private float meleeDelay;
     
@@ -45,7 +46,9 @@ public class Player : MonoBehaviour
 
     [Header("Attack Prefabs")]
     [SerializeField] private GameObject meleeAttack;
+    [SerializeField] private GameObject meleeAttackUp;
     [SerializeField] private GameObject fireSpell;
+
     [Header("Game Manager")]
     [SerializeField] private GameManager gameManager;
     private Animator anim;
@@ -145,10 +148,14 @@ public class Player : MonoBehaviour
             //Standard Melee attack
             if (Input.GetButtonDown("Fire1") && actionReady) {
 
-                Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
-                gameManager.audioManager.playAttackClip();
-                actionDelay = meleeDelay;
+                if (Input.GetKey(KeyCode.W)) 
+                    attackUp();
+
+                else 
+                    attack();    
             }
+
+            
 
             //Start charging spell when key pressed and held, shoot when released or after 3 seconds. 
             if (Input.GetButtonDown("Fire2") && actionReady) {
@@ -289,7 +296,7 @@ public class Player : MonoBehaviour
         if (isAlive) {
 
             float horizontalInput = Input.GetAxisRaw("Horizontal");
-            anim.SetFloat("Run", Mathf.Abs(horizontalInput));
+            //anim.SetFloat("Run", Mathf.Abs(horizontalInput)); //deprecated to use the boolean below. 
             anim.SetBool("isRunning", horizontalInput != 0);
             anim.SetFloat("JumpLoop", rbody.velocity.y);
             anim.SetBool("Grounded", isGrounded());
@@ -365,6 +372,7 @@ public class Player : MonoBehaviour
 
         if (health <= 0) {
             isAlive = false;
+            anim.SetTrigger("Death");
             gameManager.GameOver();
         }
         
@@ -490,7 +498,25 @@ public class Player : MonoBehaviour
         
     }
 
+    public void attack() {
+
+        attackFX();
+        var swing = Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
+        
+    }
+
+    public void attackUp() {
+        
+        attackFX();
+        Instantiate(meleeAttackUp, attackSpawnUp.position, Quaternion.Euler(0, 0, 90));
+    }
     
+    public void attackFX() {
+
+        anim.SetTrigger("Attack");
+        gameManager.audioManager.playAttackClip();
+        actionDelay = meleeDelay;
+    }
 
 
 
@@ -552,6 +578,10 @@ public class Player : MonoBehaviour
             Vector2 difference = (transform.position - other.transform.position).normalized;
             Vector2 force = difference * knockBackForce;
             rbody.AddForce(force, ForceMode2D.Impulse); //if you don't want to take into consideration enemy's mass then use ForceMode.VelocityChange
+        }
+
+        if (other.collider.tag == "KillVolume") {
+            health = 0;
         }
     }
 

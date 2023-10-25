@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - PL_Attack
+  - KillVolume
   - Pl_Attack
   layers:
   - Default

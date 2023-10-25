@@ -749,7 +749,7 @@ MonoBehaviour:
   isPaused: 0
   isGameOver: 0
   player: {fileID: 834056742}
-  UIManager: {fileID: 1901181546}
+  _UIManager: {fileID: 0}
   audioManager: {fileID: 0}
   groundLayer:
     serializedVersion: 2
@@ -1548,7 +1548,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.31, y: -0.342, z: -10}
+  m_LocalPosition: {x: -1.16, y: -0.342, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2869,6 +2869,7 @@ MonoBehaviour:
   maxHealth: 100
   ultMaxHealth: 250
   attackSpawn: {fileID: 535462186}
+  attackSpawnUp: {fileID: 1895773575}
   knockBackForce: 500
   meleeDelay: 0.35
   maxMana: 3
@@ -2878,7 +2879,8 @@ MonoBehaviour:
   manaCharge: 5
   spellCharge: 0
   manaCells: []
-  meleeAttack: {fileID: 4839735239075592020, guid: bcfe659a357c3ef4095cb5c95654238f, type: 3}
+  meleeAttack: {fileID: 4839735239075592020, guid: 93b2b4b7955332e46a18626b636413f3, type: 3}
+  meleeAttackUp: {fileID: 4839735239075592020, guid: bcfe659a357c3ef4095cb5c95654238f, type: 3}
   fireSpell: {fileID: 5702798483048693747, guid: 46cd88bab66371240a8ee612af282cb1, type: 3}
   gameManager: {fileID: 225434649}
 --- !u!50 &834056743
@@ -2968,13 +2970,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 834056741}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.31, y: -0.342, z: 0}
+  m_LocalPosition: {x: -1.16, y: -0.342, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 148850550}
   - {fileID: 1547415260}
   - {fileID: 535462186}
+  - {fileID: 1895773575}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4266,9 +4269,10 @@ GameObject:
   - component: {fileID: 1205039232}
   - component: {fileID: 1205039231}
   - component: {fileID: 1205039233}
-  m_Layer: 0
+  - component: {fileID: 1205039234}
+  m_Layer: 10
   m_Name: Virtual Camera
-  m_TagString: Untagged
+  m_TagString: KillVolume
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4320,7 +4324,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1205039230}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.31, y: -0.342, z: -10}
+  m_LocalPosition: {x: -1.16, y: -0.342, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4342,6 +4346,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minYPosition: -5
   maxYPosition: 15
+--- !u!61 &1205039234
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1205039230}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: -12}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 40, y: 2.5}
+  m_EdgeRadius: 0
 --- !u!1 &1311949084
 GameObject:
   m_ObjectHideFlags: 0
@@ -4380,7 +4430,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -24.240173, y: 25}
+  m_AnchoredPosition: {x: -24.240234, y: 25}
   m_SizeDelta: {x: -1374, y: -960}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1311949086
@@ -36625,7 +36675,7 @@ GameObject:
   - component: {fileID: 1695406620}
   - component: {fileID: 1695406622}
   - component: {fileID: 1695406623}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: cm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37067,6 +37117,37 @@ RectTransform:
   m_AnchoredPosition: {x: 500, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1895773574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1895773575}
+  m_Layer: 6
+  m_Name: AttackSpawnUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1895773575
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895773574}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071065, w: 0.7071071}
+  m_LocalPosition: {x: 0, y: 1.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 834056746}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!1 &1901181541
 GameObject:
   m_ObjectHideFlags: 0
