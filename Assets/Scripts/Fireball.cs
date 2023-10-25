@@ -10,6 +10,7 @@ public class Fireball : MonoBehaviour
     //private Collision2D collision2D;
     //[SerializeField] private Transform hit; //Using oncollisionEnter2D instead
     private GameManager gameManager; 
+    private AudioSource fxsound;
     private bool expired;
     private bool faceRight; //Calls gameManager method directly on spawn
 
@@ -26,6 +27,7 @@ public class Fireball : MonoBehaviour
         charge = gameManager.player.spellCharge;
         
         expired = false;
+        fxsound = Instantiate<AudioSource>(gameManager.audioManager.playFireBall());
         
 
         if (faceRight) {
@@ -73,7 +75,8 @@ public class Fireball : MonoBehaviour
         
 
         if (expired) {
-
+            if (fxsound != null) 
+                gameManager.audioManager.stopFireball(fxsound);
             expireTime -= Time.deltaTime;
         }
 

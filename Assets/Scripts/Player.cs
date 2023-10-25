@@ -11,7 +11,9 @@ public class Player : MonoBehaviour
     [Header("Movement")]
     public float jumpHeight, speed;
     [SerializeField] private Transform groundCheck;
+    [SerializeField] private int footstepDelay;
     private bool faceRight = true;
+    
     //private bool grounded; //using physics overlap method. 
     //private float horizontal; 
     //public float maxSpeed, acceleration, deceleration;
@@ -99,7 +101,7 @@ public class Player : MonoBehaviour
             //transform.position.x = transform.position.x + speed*Time.deltaTime;
 
 
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) && isGrounded()) {
+            /* if ((Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump")) && isGrounded()) {
                 
                 Debug.Log("Jump input");
                 //rbody.AddForceY(jumpHeight);
@@ -113,7 +115,7 @@ public class Player : MonoBehaviour
 
                 rbody.velocity = new Vector2(rbody.velocity.x, rbody.velocity.y * 0.25f);
             }
-
+ */
             
 
             //Not sure if this will be used. 
@@ -144,6 +146,7 @@ public class Player : MonoBehaviour
             if (Input.GetButtonDown("Fire1") && actionReady) {
 
                 Instantiate(meleeAttack, attackSpawn.position, Quaternion.identity);
+                gameManager.audioManager.playAttackClip();
                 actionDelay = meleeDelay;
             }
 
@@ -231,7 +234,7 @@ public class Player : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.F3)) {
 
                     Debug.Log("Debug Toggle");
-                    gameManager.UIManager.toggleDebug();
+                    gameManager._UIManager.toggleDebug();
                 }
 
                 if (Input.GetKeyDown(KeyCode.Keypad1)) {
@@ -294,6 +297,9 @@ public class Player : MonoBehaviour
 
             rbody.velocity = new Vector2(horizontalInput * speed, rbody.velocity.y);
             
+
+            if (horizontalInput != 0 && isGrounded() && Time.frameCount % footstepDelay == 0) 
+                gameManager.audioManager.playFootstepClip();
             if ((horizontalInput > 0 && !faceRight) || (horizontalInput < 0 && faceRight)) {
 
                 flip();
@@ -303,6 +309,7 @@ public class Player : MonoBehaviour
                 //
                 Debug.Log("Jump input");
                 jump();
+                gameManager.audioManager.playJumpClip();
                 //rbody.AddForceY(jumpHeight);
                 //rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight + Math.Abs(rbody.velocity.x * 0.75f));
                 
@@ -343,6 +350,7 @@ public class Player : MonoBehaviour
 
         rbody.velocity = new Vector2(rbody.velocity.x, jumpHeight);
         anim.SetTrigger("Jump");
+        
         
         //grounded = false;
     }
@@ -458,7 +466,7 @@ public class Player : MonoBehaviour
         
             manaCells.Add(gameObject.AddComponent<ManaCell>());
             manaCells[manaCells.Count - 1].index = manaCells.Count - 1;
-            gameManager.UIManager.addManaOrb();
+            gameManager._UIManager.addManaOrb();
             Debug.Log("Mana Added - Total Mana:" + manaCells.Count);
        
         }

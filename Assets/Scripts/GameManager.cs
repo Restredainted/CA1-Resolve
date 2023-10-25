@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Primary Game Components")]
     public Player player;
-    public UIManager UIManager;
+    public UIManager _UIManager;
+    public AudioManager audioManager;
     
     //Came from a tutorial, unused, not sure what they do.
     //private float updateCount = 0;
@@ -45,6 +46,10 @@ public class GameManager : MonoBehaviour
         }
         Application.targetFrameRate = 60;
 
+
+        player = FindFirstObjectByType<Player>();
+        _UIManager = FindFirstObjectByType<UIManager>();
+        audioManager = FindFirstObjectByType<AudioManager>();
 
     }
 
@@ -92,7 +97,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         //Pause Menu call
-        UIManager.togglePause();
+        _UIManager.togglePause();
     }
 
     public void ResumeGame() {
@@ -101,18 +106,18 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         
         //hide pause menu
-        UIManager.togglePause();
+        _UIManager.togglePause();
     }
 
     public void GameOver() {
 
         isGameOver = true;
-        UIManager.toggleGameOver();
+        _UIManager.toggleGameOver();
         
     }
 
     public void ReturnMainMenu() {
-        ResumeGame();
+        Time.timeScale = 1f;
         SceneManager.LoadScene(0);
     }
 

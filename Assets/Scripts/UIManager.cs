@@ -59,6 +59,7 @@ public class UIManager : MonoBehaviour
         debugVisible = false;
         
         gameManager = FindFirstObjectByType<GameManager>();
+        player = FindFirstObjectByType<Player>();
         
         for (int i = 0; i < player.maxMana; i += 1) {
 
@@ -92,7 +93,10 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (player == null) {
+
+            player = FindFirstObjectByType<Player>();
+        }
         /* Moved and updated in DebugUIManager
         _debugVelY.text = "Velocity Y: " + player.GetComponent<Rigidbody2D>().velocityY.ToString();
         _debugVelX.text = "Velocity X: " + player.GetComponent<Rigidbody2D>().velocityX.ToString();
