@@ -362,6 +362,12 @@ public class Player : MonoBehaviour
         //grounded = false;
     }
 
+    public void killPlayer() {
+            isAlive = false;
+            anim.SetTrigger("Death");
+            gameManager.GameOver();
+    }
+
     //Health System Methods.
     public void takeDamage(float damage) {
 
@@ -371,9 +377,7 @@ public class Player : MonoBehaviour
         health = Mathf.Clamp(health, 0, maxHealth);
 
         if (health <= 0) {
-            isAlive = false;
-            anim.SetTrigger("Death");
-            gameManager.GameOver();
+            killPlayer();
         }
         
     }
@@ -581,7 +585,7 @@ public class Player : MonoBehaviour
         }
 
         if (other.collider.tag == "KillVolume") {
-            health = 0;
+            killPlayer();
         }
     }
 
